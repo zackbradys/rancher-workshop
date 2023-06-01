@@ -1,32 +1,29 @@
 #!/bin/bash
 
-set -e
+set -ebpf
 
-num=3 # num of students
+num=3
 prefix=student
 password=Pa22word
 zone=nyc3
-size=s-8vcpu-16gb-amd
-key=30:98:4f:c5:47:c2:88:28:fe:3c:23:cd:52:49:51:01
+size=s-4vcpu-8gb-amd
+key=65:04:dc:73:0f:7c:b7:20:21:82:14:d6:d3:d7:b2:d2
 image=rockylinux-9-x64
-
 domain=rancherfederal.training
 
 export RKE_VERSION=1.24.14
 
-######  NO MOAR EDITS #######
 export RED='\x1b[0;31m'
 export GREEN='\x1b[32m'
 export BLUE='\x1b[34m'
 export NO_COLOR='\x1b[0m'
 
-#better error checking
+### error checking
 command -v pdsh >/dev/null 2>&1 || { echo -e "$RED" " ** Pdsh was not found. Please install before preceeding. ** " "$NO_COLOR" >&2; exit 1; }
 
-#### doctl_list ####
+### doctl list
 function dolist () { doctl compute droplet list --no-header|grep $prefix |sort -k 2 | awk '{ print $2" "$3" "$4" "$5" "$6" "$7" "$8" "$9}'; }
 
-################################# up ################################
 function up () {
 
 if [[ ! -z $(dolist) ]]; then
@@ -43,7 +40,6 @@ until [ $(doctl compute droplet list | grep $prefix | grep new | wc -l) = 0 ]; d
 
 echo -e "$GREEN" "ok" "$NO_COLOR"
 
-#check for SSH
 echo -n " checking for ssh"
 for ext in $(dolist | awk '{print $3}'); do
   until [ $(ssh -o ConnectTimeout=1 $user@$ext 'exit' 2>&1 | grep 'timed out\|refused' | wc -l) = 0 ]; do echo -n "." ; sleep 5; done
@@ -78,7 +74,6 @@ echo -n " setting up environment"
 pdsh -l root -w $host_list 'echo -e "StrictHostKeyChecking no" > /root/.ssh/config ; echo -e "[keyfile]\nunmanaged-devices=interface-name:cali*;interface-name:flannel*" > /etc/NetworkManager/conf.d/rke2-canal.conf ; echo $(hostname| sed -e "s/student//" -e "s/a//" -e "s/b//" -e "s/c//") > /root/NUM; echo "export NUM=\$(cat /root/NUM)" >> .bashrc; echo "export ipa=\$(getent hosts student\"\$NUM\"a.'$domain'|awk '"'"'{print \$1}'"'"')" >> .bashrc;echo "export ipb=\$(getent hosts student\"\$NUM\"b.'$domain'|awk '"'"'{print \$1}'"'"')" >> .bashrc;echo "export ipc=\$(getent hosts student\"\$NUM\"c.'$domain'|awk '"'"'{print \$1}'"'"')" >> .bashrc ; echo "export PATH=\$PATH:/opt/bin" >> .bashrc'
 echo -e "$GREEN" "ok" "$NO_COLOR"
 
-#kernel tuning
 echo -e -n " updating kernel settings"
 pdsh -l root -w $host_list 'cat << EOF >> /etc/sysctl.conf
 # SWAP settings
@@ -152,14 +147,11 @@ echo "===== Cluster ====="
 doctl compute droplet list --no-header |grep $prefix
 }
 
-############################## kill ################################
-#remove the vms
 function kill () {
 echo -n " killing it all "
 for i in $(doctl compute domain records list $domain --no-header | grep -v "@"| awk '{print $1}' ); do    
   doctl compute domain records delete $domain $i --force; 
 done
-
 
 for i in $(doctl compute droplet list --no-header|grep $prefix|awk '{print $1}'); do 
   doctl compute droplet delete --force $i
