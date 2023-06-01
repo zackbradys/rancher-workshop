@@ -1,30 +1,51 @@
-# Rancher Workshop - https://rfed.io/rkeshop
+# Rancher Government Solutions Workshop
+There is a nice article about it from [Businesswire](https://www.businesswire.com/news/home/20221101005546/en/DISA-Validates-Rancher-Government-Solutions%E2%80%99-Kubernetes-Distribution-RKE2-Security-Technical-Implementation-Guide).
 
-#### clemenko@gmail.com | [@clemenko](https://twitter.com/clemenko)
+You can download the STIG itself from [https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RGS_RKE2_V1R1_STIG.zip](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RGS_RKE2_V1R1_STIG.zip). The SITG viewer can be found on DISA's site at [https://public.cyber.mil/stigs/srg-stig-tools/](https://public.cyber.mil/stigs/srg-stig-tools/). For this guide I have simplified the controls and provided simple steps to ensure compliance. Hope this helps a little.
 
-![logo](./images/rgs-banner-rounded.png)
+We even have a tl:dr for Rancher https://github.com/clemenko/rancher_stig.
+![rancher-long-banner](./images/rgs-banner-rounded.png)
 
-This is a simple workshop for installing RKE2, Rancher, Longhorn, NeuVector, and a few extras. We can pivot for k3s or airgapped. :D
-
-## Agenda
-
-* [Rules of Engagement](#rules-of-engagement)
-* [Setup - COMPLETED ALREADY](#setup---completed-already)
-* [RKE2 - STIG](#rke2---stig)
-* [Sign-Up for a Student Environment](#sign-up-for-a-student-environment)
-* [Code-Server](#code-server)
-* [RKE2 - Install](#rke2---install)
-  * [studenta](#studenta)
-  * [studentb/studentc](#studentb-studentc)
-* [RKE2 - Air Gap](#rke2---air-gap)
-* [Longhorn](#longhorn)
-* [Rancher](#rancher)
-* [Neuvector](#neuvector)
+### Table of Contents
+* [About Me](#about-me)
+* [Introduction](#introduction)
+* [Infrastructure](#infrastructure)
+* [Rancher RKE2](#rancher-rke2)
+* [Rancher Multi Cluster Manager](#rancher-multi-cluster-manager)
+* [Rancher Longhorn](#rancher-longhorn)
+* [Rancher NeuVector](#rancher-neuvector)
 * [Gitea and Fleet](#gitea-and-fleet)
-* [Questions, Thoughts, Comments, Concerns](#questions--thoughts--comments--concerns)
-* [Profit](#profit)
+* [Questions/Comments](#questions/comments)
 
-## Rules of Engagement
+
+## About Me
+A little bit about me, my history, and what I've done in the industry. 
+- DOD/IC Contractor
+- U.S. Military Veteran
+- Open-Source Contributor
+- Built and Exited a Digital Firm
+- Active Volunteer Firefighter/EMT
+
+
+## Introduction
+
+### Welcome to the Rancher Government Solutions Workshop! 
+We will be installing, configuring, and deploying the entire Rancher Stack, including: Rancher RKE2, Rancher Multi-Cluster Manager, Rancher Longhorn, and Rancher NeuVector. Additionally, we will be enabling all hardened features such as CIS Profiles, DISA STIGS, and more. For ease of the workshop, we will not be simulating an airgap. If you would like to find out more about how easy the Rancher Stack can be airgapped, please reach out!
+
+You are welcome to follow along with me or skip ahead, all the instructions are included below and it's all copy/paste. Don't worry... we have had plenty of folks forget how to copy/paste... you will not be the first, so please ask questions!
+
+Before we get started, I wanted to shout out to **[@clemenko](https://github.com/clemenko)** for the basis of this workshop. 
+
+### The Rancher Stack:
+* Rancher RKE2 (Kubernetes Engine) - [learn more](https://www.rancher.com/products/rke)
+* Rancher MCM (Cluster Management) - [learn more](https://www.rancher.com/products/rancher)
+* Longhorn (Storage) - [learn more](https://www.rancher.com/products/longhorn)
+* Neuvector (Security) - [learn more](https://ranchergovernment.com/neuvector)
+* An awesome demo application or two :)
+
+## Infrastructure
+
+### Prerequistes
 
 * Basic Linux command line skills
 * Familiarity with a text editor (VSCode aka Code-Server)
@@ -33,45 +54,17 @@ This is a simple workshop for installing RKE2, Rancher, Longhorn, NeuVector, and
   * Rocky Linux 9
 * ASK QUESTIONS!
 
-![kid](./images/tough_kid.jpg)
+### Student Environment Signup
 
-## Setup - COMPLETED ALREADY
+http://workshop-signup.rancherfederal.io
 
-Just a quick note about the vms. We are using Rocky 9. The servers are setup with all the necessary packages and kernel tuning. SELinux is enforcing. Let's talk about STIG's.
+### Access the Environment
 
-## RKE2 - STIG
+Access URL: `http://student$NUMa.rancherfederal.training:8080`
 
-There is a nice article about it from [Businesswire](https://www.businesswire.com/news/home/20221101005546/en/DISA-Validates-Rancher-Government-Solutions%E2%80%99-Kubernetes-Distribution-RKE2-Security-Technical-Implementation-Guide).
+Password = `Pa22word`
 
-You can download the STIG itself from [https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RGS_RKE2_V1R1_STIG.zip](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RGS_RKE2_V1R1_STIG.zip). The SITG viewer can be found on DISA's site at [https://public.cyber.mil/stigs/srg-stig-tools/](https://public.cyber.mil/stigs/srg-stig-tools/). For this guide I have simplified the controls and provided simple steps to ensure compliance. Hope this helps a little.
-
-We even have a tl:dr for Rancher https://github.com/clemenko/rancher_stig.
-
-Bottom Line
-
-* Enable SElinux
-* Update the config for the Control Plane and Worker nodes.
-
-Enough STIG. Let's start deploying.
-
-## Sign-Up for a Student Environment
-
-## https://rfed.io/rkeshop_signup
-
-## Code-Server
-
-Navigate to http://student$NUMa.rfed.run:8080
-
-Password = `Pa22word`.
-
-We can SSH from there OR use ssh from your device/laptop.
-
-SSH to the other servers for your student number.
-
-* Open a second terminal tab and `ssh $ipb`.
-* Open a third terminal tab and `ssh $ipc`.
-
-## RKE2 - Install
+## Rancher RKE2
 
 If you are bored you can read the [docs](https://docs.rke2.io/). For speed, we are completing an online installation.
 
@@ -112,7 +105,7 @@ rsync -avP /var/lib/rancher/rke2/server/token $ipb:/root
 rsync -avP /var/lib/rancher/rke2/server/token $ipc:/root
 ```
 
-### studentb/studentc
+### studentb and studentc
 
 Let's run the same commands on the other two servers, b and c.
 
@@ -132,54 +125,7 @@ echo -e "server: https://$ipa:9345\ntoken: $token\nwrite-kubeconfig-mode: 0600\n
 systemctl enable --now rke2-agent.service
 ```
 
-## RKE2 - Air Gap
-
-Before we move on, let's take a second to call our how to air gap RKE2.
-
-tl:dr : Move the following files:
-
-* install.sh - install script
-* rke2-images.linux-amd64.tar.zst - images
-* rke2.linux-amd64.tar.gz - binaries
-* rke2-common-1.24.10.rke2r1-0.x86_64.rpm - common rpm
-* rke2-selinux-0.11-1.el8.noarch.rpm - selinux contexts
-
-There is more detailed information in the blog post: https://github.com/clemenko/rke_airgap_install.
-
----
-
-## Longhorn
-
-Here is the easiest way to build stateful storage on this cluster. [Longhorn](https://longhorn.io) from Rancher is awesome. Lets deploy from the first node.
-
-Note we are installing online for speed. Please see the [Air Gap Install](https://longhorn.io/docs/1.3.2/advanced-resources/deploy/airgap/#using-a-helm-chart) guide.
-
-```bash
-# kubectl apply
-helm repo add longhorn https://charts.longhorn.io
-helm repo update
-helm upgrade -i longhorn longhorn/longhorn --namespace longhorn-system --create-namespace --set ingress.enabled=true --set ingress.host=longhorn.$NUM.rfed.run
-
-# to verify that longhorn is the default storage class
-kubectl get sc
-
-# add encrypted storage class
-kubectl apply -f https://raw.githubusercontent.com/clemenko/k8s_yaml/master/longhorn_encryption.yml
-
-# go to page
-echo "---------------------------------------------------------"
-echo " control/command click : http://longhorn.$NUM.rfed.run"
-echo "---------------------------------------------------------"
-
-# Watch it coming up
-watch kubectl get pod -n longhorn-system
-```
-
-Once everything is running we can move on.
-
----
-
-## Rancher
+## Rancher Multi Cluster Manager
 
 For time, let's install Rancher in an online fashion.
 
@@ -195,11 +141,11 @@ helm repo update
 helm upgrade -i cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --set installCRDs=true
 
 # now for rancher
-helm upgrade -i rancher rancher-latest/rancher --namespace cattle-system --create-namespace --set hostname=rancher.$NUM.rfed.run --set bootstrapPassword=Pa22word --set replicas=1 --set auditLog.level=2 --set auditLog.destination=hostPath
+helm upgrade -i rancher rancher-latest/rancher --namespace cattle-system --create-namespace --set hostname=rancher.$NUM.rancherfederal.training --set bootstrapPassword=Pa22word --set replicas=1 --set auditLog.level=2 --set auditLog.destination=hostPath
 
 # go to page
 echo "---------------------------------------------------------"
-echo " control/command click : http://rancher.$NUM.rfed.run"
+echo " control/command click : http://rancher.$NUM.rancherfederal.training"
 echo "---------------------------------------------------------"
 
 ```
@@ -207,9 +153,36 @@ echo "---------------------------------------------------------"
 The username is `admin`.
 The password is `Pa22word`.
 
----
+## Rancher Longhorn
 
-## Neuvector
+Here is the easiest way to build stateful storage on this cluster. [Longhorn](https://longhorn.io) from Rancher is awesome. Lets deploy from the first node.
+
+Note we are installing online for speed. Please see the [Air Gap Install](https://longhorn.io/docs/1.3.2/advanced-resources/deploy/airgap/#using-a-helm-chart) guide.
+
+```bash
+# kubectl apply
+helm repo add longhorn https://charts.longhorn.io
+helm repo update
+helm upgrade -i longhorn longhorn/longhorn --namespace longhorn-system --create-namespace --set ingress.enabled=true --set ingress.host=longhorn.$NUM.rancherfederal.training
+
+# to verify that longhorn is the default storage class
+kubectl get sc
+
+# add encrypted storage class
+kubectl apply -f https://raw.githubusercontent.com/clemenko/k8s_yaml/master/longhorn_encryption.yml
+
+# go to page
+echo "---------------------------------------------------------"
+echo " control/command click : http://longhorn.$NUM.rancherfederal.training"
+echo "---------------------------------------------------------"
+
+# Watch it coming up
+watch kubectl get pod -n longhorn-system
+```
+
+Once everything is running we can move on.
+
+## Rancher NeuVector
 
 If we have time we can start to look at a security layer tool for Kubernetes, https://neuvector.com/. They have fairly good [docs here](https://open-docs.neuvector.com/).
 
@@ -219,18 +192,17 @@ Note we are installing online for speed. Please see the [Air Gap Install](https:
 helm repo add neuvector https://neuvector.github.io/neuvector-helm/
 helm repo update
 
-helm upgrade -i neuvector --namespace neuvector neuvector/core --create-namespace  --set imagePullSecrets=regsecret --set k3s.enabled=true --set k3s.runtimePath=/run/k3s/containerd/containerd.sock --set manager.ingress.enabled=true --set manager.ingress.host=neuvector.$NUM.rfed.run
+helm upgrade -i neuvector --namespace neuvector neuvector/core --create-namespace  --set imagePullSecrets=regsecret --set k3s.enabled=true --set k3s.runtimePath=/run/k3s/containerd/containerd.sock --set manager.ingress.enabled=true --set manager.ingress.host=neuvector.$NUM.rancherfederal.training
 
 # go to page
 echo "---------------------------------------------------------"
-echo " control/command click : http://neuvector.$NUM.rfed.run"
+echo " control/command click : http://neuvector.$NUM.rancherfederal.training"
 echo "---------------------------------------------------------"
 ```
 
 The username is `admin`.
 The password is `admin`.
 
----
 
 ## Gitea and Fleet
 
@@ -240,7 +212,7 @@ Why not add version control? If we have time.
 helm repo add gitea-charts https://dl.gitea.io/charts/
 helm repo update
 
-helm upgrade -i gitea gitea-charts/gitea --namespace gitea --create-namespace --set gitea.admin.password=Pa22word --set gitea.admin.username=gitea --set persistence.size=500Mi --set postgresql.persistence.size=500Mi --set gitea.config.server.ROOT_URL=http://git.$NUM.rfed.run --set gitea.config.server.DOMAIN=git.$NUM.rfed.run --set ingress.enabled=true --set ingress.hosts[0].host=git.$NUM.rfed.run --set ingress.hosts[0].paths[0].path=/ --set ingress.hosts[0].paths[0].pathType=Prefix
+helm upgrade -i gitea gitea-charts/gitea --namespace gitea --create-namespace --set gitea.admin.password=Pa22word --set gitea.admin.username=gitea --set persistence.size=500Mi --set postgresql.persistence.size=500Mi --set gitea.config.server.ROOT_URL=http://git.$NUM.rancherfederal.training --set gitea.config.server.DOMAIN=git.$NUM.rancherfederal.training --set ingress.enabled=true --set ingress.hosts[0].host=git.$NUM.rancherfederal.training --set ingress.hosts[0].paths[0].path=/ --set ingress.hosts[0].paths[0].pathType=Prefix
 
 # wait for it to complete
 watch kubectl get pod -n gitea
@@ -250,29 +222,27 @@ Once everything is up. We can mirror a demo repo.
 
 ```bash
 # now lets mirror
-curl -X POST 'http://git.'$NUM'.rfed.run/api/v1/repos/migrate' -H 'accept: application/json' -H 'authorization: Basic Z2l0ZWE6UGEyMndvcmQ=' -H 'Content-Type: application/json' -d '{ "clone_addr": "https://github.com/clemenko/rke_workshop", "repo_name": "workshop","repo_owner": "gitea"}'
+curl -X POST 'http://git.'$NUM'.rancherfederal.training/api/v1/repos/migrate' -H 'accept: application/json' -H 'authorization: Basic Z2l0ZWE6UGEyMndvcmQ=' -H 'Content-Type: application/json' -d '{ "clone_addr": "https://github.com/clemenko/rke_workshop", "repo_name": "workshop","repo_owner": "gitea"}'
 
 # go to page
 echo "---------------------------------------------------------"
-echo " control/command click : http://git.$NUM.rfed.run"
+echo " control/command click : http://git.$NUM.rancherfederal.training"
 echo "---------------------------------------------------------"
 ```
 
 The username is `gitea`.
 The password is `Pa22word`.
 
-We need to edit fleet yaml : http://git.$NUM.rfed.run/gitea/workshop/src/branch/main/fleet/gitea.yaml . Change "$NUM" to your student number.
+We need to edit fleet yaml : http://git.$NUM.rancherfederal.training/gitea/workshop/src/branch/main/fleet/gitea.yaml . Change "$NUM" to your student number.
 
 Once edited we can add to fleet with:
 
 ```bash
 # patch
 kubectl patch clusters.fleet.cattle.io -n fleet-local local --type=merge -p '{"metadata": {"labels":{"name":"local"}}}'
-kubectl apply -f http://git.$NUM.rfed.run/gitea/workshop/raw/branch/main/fleet/gitea.yaml
+kubectl apply -f http://git.$NUM.rancherfederal.training/gitea/workshop/raw/branch/main/fleet/gitea.yaml
 ```
 
-## Questions, Thoughts, Comments, Concerns
+## Questions/Comments
 
-## Profit
-
-![success](./images/success.jpg)
+Workshop Completed! Nice.

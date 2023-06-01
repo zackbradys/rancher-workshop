@@ -1,8 +1,7 @@
 #!/bin/bash
-###################################
-# edit vars
-###################################
+
 set -e
+
 num=3 # num of students
 prefix=student
 password=Pa22word
@@ -11,9 +10,9 @@ size=s-8vcpu-16gb-amd
 key=30:98:4f:c5:47:c2:88:28:fe:3c:23:cd:52:49:51:01
 image=rockylinux-9-x64
 
-domain=rfed.run
+domain=rancherfederal.training
 
-export RKE_VERSION=1.24.10
+export RKE_VERSION=1.24.14
 
 ######  NO MOAR EDITS #######
 export RED='\x1b[0;31m'
@@ -134,13 +133,8 @@ EOF
 sysctl -p' > /dev/null 2>&1
 echo -e "$GREEN" "ok" "$NO_COLOR"
 
-#echo -e -n " loading stuff"
-# deprecated
-#pdsh -l root -w $host_list "mkdir /opt/rke2-artifacts && cd /opt/rke2-artifacts/ && curl -#OL https://github.com/rancher/rke2/releases/download/v$RKE_VERSION%2Brke2r1/rke2-images.linux-amd64.tar.zst && curl -#OL https://github.com/rancher/rke2/releases/download/v$RKE_VERSION%2Brke2r1/rke2.linux-amd64.tar.gz && curl -#OL https://github.com/rancher/rke2/releases/download/v$RKE_VERSION%2Brke2r1/sha256sum-amd64.txt &&  curl -sfL https://get.rke2.io --output install.sh && chmod 755 install.sh; curl -#OL https://github.com/rancher/rke2-packaging/releases/download/v$RKE_VERSION%2Brke2r1.stable.0/rke2-common-$RKE_VERSION.rke2r1-0.x86_64.rpm; curl -#OL https://github.com/rancher/rke2-selinux/releases/download/v0.11.stable.1/rke2-selinux-0.11-1.el8.noarch.rpm" > /dev/null 2>&1
-#echo -e "$GREEN" "ok" "$NO_COLOR"
-
 echo -n " install code-serer"
-pdsh -l root -w $master_list 'curl -s https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash; curl -fsSL https://code-server.dev/install.sh | sh ; mkdir -p /root/.config/code-server/ /root/.local/share/code-server/User/; echo -e "bind-addr: 0.0.0.0:8080\nauth: password\npassword: Pa22word\ncert: false" > ~/.config/code-server/config.yaml ; echo -e "{\n    \"terminal.integrated.defaultLocation\": \"editor\",\n    \"terminal.integrated.shell.linux\": \"/bin/bash\",\n    \"terminal.integrated.defaultProfile.linux\": \"bash\"\n}" > /root/.local/share/code-server/User/settings.json ; systemctl enable --now code-server@root; yum install -y git; cd /opt; git clone https://github.com/clemenko/rke_workshop.git' > /dev/null 2>&1
+pdsh -l root -w $master_list 'curl -s https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash; curl -fsSL https://code-server.dev/install.sh | sh ; mkdir -p /root/.config/code-server/ /root/.local/share/code-server/User/; echo -e "bind-addr: 0.0.0.0:8080\nauth: password\npassword: Pa22word\ncert: false" > ~/.config/code-server/config.yaml ; echo -e "{\n    \"terminal.integrated.defaultLocation\": \"editor\",\n    \"terminal.integrated.shell.linux\": \"/bin/bash\",\n    \"terminal.integrated.defaultProfile.linux\": \"bash\"\n}" > /root/.local/share/code-server/User/settings.json ; systemctl enable --now code-server@root; yum install -y git; cd /opt; git clone https://github.com/zackbradys/rancher-workshop.git' > /dev/null 2>&1
 echo -e "$GREEN" "ok" "$NO_COLOR"
 
 echo -n " set up ssh key"
