@@ -4,6 +4,7 @@ set -ebpf
 
 ### Set Variables
 export DOMAIN=${DOMAIN}
+export NUM=${NUM}
 
 ### Applying System Settings
 cat << EOF >> /etc/sysctl.conf
