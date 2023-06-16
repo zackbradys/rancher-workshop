@@ -4,7 +4,6 @@ set -ebpf
 
 ### Set Variables
 export DOMAIN=${DOMAIN}
-export TOKEN=${TOKEN}
 
 ### Applying System Settings
 cat << EOF >> /etc/sysctl.conf
@@ -56,19 +55,36 @@ net.ipv4.ip_forward=1
 fs.inotify.max_user_instances=8192
 fs.inotify.max_user_watches=1048576
 EOF
-
 sysctl -p > /dev/null 2>&1
 
+### Updating SSH Settings
+echo "root:Pa22word" | chpasswd
+sed -i -e "s/#PasswordAuthentication no/PasswordAuthentication yes/g" -e "s/#PermitRootLogin prohibit-password/PermitRootLogin yes/g" /etc/ssh/sshd_config
+systemctl restart sshd
+
+echo -e "StrictHostKeyChecking no" > /root/.ssh/config
+
 ### Install Packages
-yum install -y zip zstd tree jq iptables container-selinux iptables libnetfilter_conntrack libnfnetlink libnftnl policycoreutils-python-utils cryptsetup
+yum install -y zip zstd tree jq git container-selinux iptables libnetfilter_conntrack libnfnetlink libnftnl policycoreutils-python-utils cryptsetup
 yum --setopt=tsflags=noscripts install -y nfs-utils
 yum --setopt=tsflags=noscripts install -y iscsi-initiator-utils && echo "InitiatorName=$(/sbin/iscsi-iname)" > /etc/iscsi/initiatorname.iscsi && systemctl enable --now iscsid
 echo -e "[keyfile]\nunmanaged-devices=interface-name:cali*;interface-name:flannel*" > /etc/NetworkManager/conf.d/rke2-canal.conf
 yum update -y && yum clean all
 
+### Setting Instance Environment
+echo $(hostname| sed -e "s/student//" -e "s/a//" -e "s/b//" -e "s/c//") > /root/NUM; echo "export NUM=\$(cat /root/NUM)" >> .bashrc
+echo "export ipa=\$(getent hosts student\"\$NUM\"a.'$DOMAIN'|awk '"'"'{print \$1}'"'"')" >> .bashrc
+echo "export ipb=\$(getent hosts student\"\$NUM\"b.'$DOMAIN'|awk '"'"'{print \$1}'"'"')" >> .bashrc
+echo "export ipc=\$(getent hosts student\"\$NUM\"c.'$DOMAIN'|awk '"'"'{print \$1}'"'"')" >> .bashrc
+echo "export PATH=\$PATH:/opt/bin" >> .bashrc
+
 ### Install Helm
-mkdir -p /opt/rancher/helm
-cd /opt/rancher/helm
-curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-chmod 700 get_helm.sh && ./get_helm.sh
-mv /usr/local/bin/helm /usr/bin/helm
+curl -s https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+curl -fsSL https://code-server.dev/install.sh | sh
+mkdir -p /root/.config/code-server/ /root/.local/share/code-server/User/
+echo -e "bind-addr: 0.0.0.0:8080\nauth: password\npassword: Pa22word\ncert: false" > ~/.config/code-server/config.yaml
+echo -e "{\n    \"terminal.integrated.defaultLocation\": \"editor\",\n    \"terminal.integrated.shell.linux\": \"/bin/bash\",\n    \"terminal.integrated.defaultProfile.linux\": \"bash\"\n}" > /root/.local/share/code-server/User/settings.json
+systemctl enable --now code-server@root
+
+cd /opt/
+git clone https://github.com/zackbradys/rancher-workshop.git

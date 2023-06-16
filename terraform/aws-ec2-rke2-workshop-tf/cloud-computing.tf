@@ -11,7 +11,7 @@ resource "aws_instance" "aws_ec2_instance_studenta" {
 
   user_data = templatefile("${var.user_data_studenta}", {
     DOMAIN  = var.domain
-    TOKEN   = var.token
+    NUM     = "${count.index + 1}"
   })
 
   tags = {
@@ -43,7 +43,7 @@ resource "aws_instance" "aws_ec2_instance_studentb" {
 
   user_data = templatefile("${var.user_data_studentb}", {
     DOMAIN  = var.domain
-    TOKEN   = var.token
+    NUM     = "${count.index + 1}"
   })
 
   tags = {
@@ -75,7 +75,7 @@ resource "aws_instance" "aws_ec2_instance_studentc" {
 
   user_data = templatefile("${var.user_data_studentc}", {
     DOMAIN  = var.domain
-    TOKEN   = var.token
+    NUM     = "${count.index + 1}"
   })
 
   tags = {

@@ -4,7 +4,6 @@ set -ebpf
 
 ### Set Variables
 export DOMAIN=${DOMAIN}
-export TOKEN=${TOKEN}
 
 ### Applying System Settings
 cat << EOF >> /etc/sysctl.conf
@@ -59,9 +58,23 @@ EOF
 
 sysctl -p > /dev/null 2>&1
 
+### Updating SSH Settings
+echo "root:Pa22word" | chpasswd
+sed -i -e "s/#PasswordAuthentication no/PasswordAuthentication yes/g" -e "s/#PermitRootLogin prohibit-password/PermitRootLogin yes/g" /etc/ssh/sshd_config
+systemctl restart sshd
+
+echo -e "StrictHostKeyChecking no" > /root/.ssh/config
+
 ### Install Packages
-yum install -y zip zstd tree jq iptables container-selinux iptables libnetfilter_conntrack libnfnetlink libnftnl policycoreutils-python-utils cryptsetup
+yum install -y zip zstd tree jq git container-selinux iptables libnetfilter_conntrack libnfnetlink libnftnl policycoreutils-python-utils cryptsetup
 yum --setopt=tsflags=noscripts install -y nfs-utils
 yum --setopt=tsflags=noscripts install -y iscsi-initiator-utils && echo "InitiatorName=$(/sbin/iscsi-iname)" > /etc/iscsi/initiatorname.iscsi && systemctl enable --now iscsid
 echo -e "[keyfile]\nunmanaged-devices=interface-name:cali*;interface-name:flannel*" > /etc/NetworkManager/conf.d/rke2-canal.conf
 yum update -y && yum clean all
+
+### Setting Instance Environment
+echo $(hostname| sed -e "s/student//" -e "s/a//" -e "s/b//" -e "s/c//") > /root/NUM; echo "export NUM=\$(cat /root/NUM)" >> .bashrc
+echo "export ipa=\$(getent hosts student\"\$NUM\"a.'$DOMAIN'|awk '"'"'{print \$1}'"'"')" >> .bashrc
+echo "export ipb=\$(getent hosts student\"\$NUM\"b.'$DOMAIN'|awk '"'"'{print \$1}'"'"')" >> .bashrc
+echo "export ipc=\$(getent hosts student\"\$NUM\"c.'$DOMAIN'|awk '"'"'{print \$1}'"'"')" >> .bashrc
+echo "export PATH=\$PATH:/opt/bin" >> .bashrc
