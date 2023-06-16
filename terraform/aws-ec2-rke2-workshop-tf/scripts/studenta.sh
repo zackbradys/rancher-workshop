@@ -79,8 +79,8 @@ echo "export ipb=\$(getent hosts student\"\$NUM\"b.'$DOMAIN'|awk '"'"'{print \$1
 echo "export ipc=\$(getent hosts student\"\$NUM\"c.'$DOMAIN'|awk '"'"'{print \$1}'"'"')" >> .bashrc
 echo "export PATH=\$PATH:/opt/bin" >> .bashrc
 
-
 ### Install Helm
+export HOME=/root
 mkdir -p /opt/rancher/helm
 cd /opt/rancher/helm
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
