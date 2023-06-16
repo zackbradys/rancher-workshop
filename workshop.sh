@@ -66,7 +66,8 @@ echo -n " adding os packages"
 pdsh -l root -w $host_list 'yum install -y nfs-utils cryptsetup iscsi-initiator-utils vim container-selinux iptables libnetfilter_conntrack libnfnetlink libnftnl policycoreutils-python-utils; systemctl enable --now iscsid.service'  > /dev/null 2>&1
 echo -e "$GREEN" "ok" "$NO_COLOR"
 
-pdsh -l root -w $host_list 'echo "root:Pa22word" | chpasswd; sed -i "s/PasswordAuthentication no/PasswordAuthentication yes/g" -e "s/#PermitRootLogin prohibit-password/PermitRootLogin yes/g" /etc/ssh/sshd_config; systemctl restart sshd' > /dev/null 2>&1
+echo -n " updating sshd "
+pdsh -l root -w $host_list 'echo "root:Pa22word" | chpasswd; sed -i "s/PasswordAuthentication no/PasswordAuthentication yes/g" /etc/ssh/sshd_config; systemctl restart sshd' > /dev/null 2>&1
 echo -e "$GREEN" "ok" "$NO_COLOR"
 
 echo -n " setting up environment"
