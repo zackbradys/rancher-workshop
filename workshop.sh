@@ -51,11 +51,11 @@ master_list=$(dolist | awk '/a/{printf $2","}' | sed 's/,$//')
 
 echo -n " updating dns "
 for i in $(seq 1 $num); do
- doctl compute domain records create $domain --record-type A --record-name $prefix"$i"a --record-ttl 150 --record-data $(dolist |grep $prefix"$i"a|awk '{print $2}') > /dev/null 2>&1
- doctl compute domain records create $domain --record-type A --record-name $prefix"$i"b --record-ttl 150 --record-data $(dolist |grep $prefix"$i"b|awk '{print $2}') > /dev/null 2>&1
- doctl compute domain records create $domain --record-type A --record-name $prefix"$i"c --record-ttl 150 --record-data $(dolist |grep $prefix"$i"c|awk '{print $2}') > /dev/null 2>&1
- doctl compute domain records create $domain --record-type A --record-name $i --record-ttl 150 --record-data $(dolist |grep $prefix"$i"a|awk '{print $2}') > /dev/null 2>&1
- doctl compute domain records create $domain --record-type CNAME --record-name "*.$i" --record-ttl 150 --record-data "$i".$domain. > /dev/null 2>&1
+ doctl compute domain records create $domain --record-type A --record-name $prefix"$i"a --record-ttl 60 --record-data $(dolist |grep $prefix"$i"a|awk '{print $2}') > /dev/null 2>&1
+ doctl compute domain records create $domain --record-type A --record-name $prefix"$i"b --record-ttl 60 --record-data $(dolist |grep $prefix"$i"b|awk '{print $2}') > /dev/null 2>&1
+ doctl compute domain records create $domain --record-type A --record-name $prefix"$i"c --record-ttl 60 --record-data $(dolist |grep $prefix"$i"c|awk '{print $2}') > /dev/null 2>&1
+ doctl compute domain records create $domain --record-type A --record-name $i --record-ttl 60 --record-data $(dolist |grep $prefix"$i"a|awk '{print $2}') > /dev/null 2>&1
+ doctl compute domain records create $domain --record-type CNAME --record-name "*.$i" --record-ttl 60 --record-data "$i".$domain. > /dev/null 2>&1
  sleep 1
 done
 echo -e "$GREEN" "ok" "$NO_COLOR"
@@ -66,8 +66,7 @@ echo -n " adding os packages"
 pdsh -l root -w $host_list 'yum install -y nfs-utils cryptsetup iscsi-initiator-utils vim container-selinux iptables libnetfilter_conntrack libnfnetlink libnftnl policycoreutils-python-utils; systemctl enable --now iscsid.service'  > /dev/null 2>&1
 echo -e "$GREEN" "ok" "$NO_COLOR"
 
-echo -n " updating sshd "
-pdsh -l root -w $host_list 'echo "root:Pa22word" | chpasswd; sed -i "s/PasswordAuthentication no/PasswordAuthentication yes/g" /etc/ssh/sshd_config; systemctl restart sshd' > /dev/null 2>&1
+pdsh -l root -w $host_list 'echo "root:Pa22word" | chpasswd; sed -i "s/PasswordAuthentication no/PasswordAuthentication yes/g" -e "s/#PermitRootLogin prohibit-password/PermitRootLogin yes/g" /etc/ssh/sshd_config; systemctl restart sshd' > /dev/null 2>&1
 echo -e "$GREEN" "ok" "$NO_COLOR"
 
 echo -n " setting up environment"
