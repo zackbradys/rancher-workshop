@@ -49,7 +49,7 @@ variable "instance_type" {
 }
 
 variable "number_of_instances" {
-  default     = 40
+  default     = 3
   description = "(Required) The number of AWS EC2 instances to create on deployment."
 }
 

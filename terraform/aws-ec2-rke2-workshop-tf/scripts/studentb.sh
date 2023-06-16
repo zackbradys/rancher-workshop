@@ -61,7 +61,7 @@ sysctl -p > /dev/null 2>&1
 
 ### Updating SSH Settings
 echo "root:Pa22word" | chpasswd
-sed -i -e "s/#PasswordAuthentication no/PasswordAuthentication yes/g" -e "s/#PermitRootLogin prohibit-password/PermitRootLogin yes/g" /etc/ssh/sshd_config
+sed -i -e "s/PasswordAuthentication no/PasswordAuthentication yes/g" -e "s/#PermitRootLogin prohibit-password/PermitRootLogin yes/g" /etc/ssh/sshd_config
 systemctl restart sshd
 
 echo -e "StrictHostKeyChecking no" > /root/.ssh/config

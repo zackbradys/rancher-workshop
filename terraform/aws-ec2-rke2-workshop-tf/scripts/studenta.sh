@@ -60,7 +60,7 @@ sysctl -p > /dev/null 2>&1
 
 ### Updating SSH Settings
 echo "root:Pa22word" | chpasswd
-sed -i -e "s/#PasswordAuthentication no/PasswordAuthentication yes/g" -e "s/#PermitRootLogin prohibit-password/PermitRootLogin yes/g" /etc/ssh/sshd_config
+sed -i -e "s/PasswordAuthentication no/PasswordAuthentication yes/g" -e "s/#PermitRootLogin prohibit-password/PermitRootLogin yes/g" /etc/ssh/sshd_config
 systemctl restart sshd
 
 echo -e "StrictHostKeyChecking no" > /root/.ssh/config
@@ -79,8 +79,15 @@ echo "export ipb=\$(getent hosts student\"\$NUM\"b.'$DOMAIN'|awk '"'"'{print \$1
 echo "export ipc=\$(getent hosts student\"\$NUM\"c.'$DOMAIN'|awk '"'"'{print \$1}'"'"')" >> .bashrc
 echo "export PATH=\$PATH:/opt/bin" >> .bashrc
 
+
 ### Install Helm
-curl -s https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+mkdir -p /opt/rancher/helm
+cd /opt/rancher/helm
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh && ./get_helm.sh
+mv /usr/local/bin/helm /usr/bin/helm
+
+### Install Code Server
 curl -fsSL https://code-server.dev/install.sh | sh
 mkdir -p /root/.config/code-server/ /root/.local/share/code-server/User/
 echo -e "bind-addr: 0.0.0.0:8080\nauth: password\npassword: Pa22word\ncert: false" > ~/.config/code-server/config.yaml
