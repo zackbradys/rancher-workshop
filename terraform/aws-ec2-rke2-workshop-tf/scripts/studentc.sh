@@ -76,10 +76,11 @@ yum update -y && yum clean all
 
 ### Setting Instance Environment
 hostname $HOSTNAME
-export HOME=/root
-export PATH=\$PATH:/opt/bin
+echo -e "export HOME=/root" >> ~/.bashrc
+echo -e "export PATH=\$PATH:/opt/bin" >> ~/.bashrc
 
 ### Setting Bash Environment
-export ipa=student${NUM}a.${DOMAIN}
-export ipb=student${NUM}b.${DOMAIN}
-export ipc=student${NUM}c.${DOMAIN}
+echo -e "export ipa=student${NUM}a.$DOMAIN" >> ~/.bashrc
+echo -e "export ipb=student${NUM}b.$DOMAIN" >> ~/.bashrc
+echo -e "export ipc=student${NUM}c.$DOMAIN" >> ~/.bashrc
+source ~/.bashrc

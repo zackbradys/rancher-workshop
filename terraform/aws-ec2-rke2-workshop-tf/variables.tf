@@ -49,7 +49,7 @@ variable "instance_type" {
 }
 
 variable "number_of_students" {
-  default     = 1
+  default     = 3
   description = "(Required) The number of students to use for the instance(s)."
 }
 
