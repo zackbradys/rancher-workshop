@@ -1,7 +1,7 @@
 resource "aws_instance" "aws_ec2_instance_studenta" {
   ami           = var.ami_id
   instance_type = var.instance_type
-  count         = var.number_of_instances
+  count         = var.number_of_students
 
   vpc_security_group_ids      = [aws_security_group.aws_rke2_sg.id]
   subnet_id                   = aws_subnet.aws_rke2_subnet.id
@@ -10,8 +10,9 @@ resource "aws_instance" "aws_ec2_instance_studenta" {
   key_name                    = var.key_pair_name
 
   user_data = templatefile("${var.user_data_studenta}", {
-    DOMAIN  = var.domain
+    DOMAIN  = "${var.domain}"
     NUM     = "${count.index + 1}"
+    HOSTNAME = "student${count.index + 1}a.${var.domain}"
   })
 
   tags = {
@@ -33,7 +34,7 @@ resource "aws_instance" "aws_ec2_instance_studenta" {
 resource "aws_instance" "aws_ec2_instance_studentb" {
   ami           = var.ami_id
   instance_type = var.instance_type
-  count         = var.number_of_instances
+  count         = var.number_of_students
 
   vpc_security_group_ids      = [aws_security_group.aws_rke2_sg.id]
   subnet_id                   = aws_subnet.aws_rke2_subnet.id
@@ -42,8 +43,9 @@ resource "aws_instance" "aws_ec2_instance_studentb" {
   key_name                    = var.key_pair_name
 
   user_data = templatefile("${var.user_data_studentb}", {
-    DOMAIN  = var.domain
+    DOMAIN  = "${var.domain}"
     NUM     = "${count.index + 1}"
+    HOSTNAME = "student${count.index + 1}b.${var.domain}"
   })
 
   tags = {
@@ -65,7 +67,7 @@ resource "aws_instance" "aws_ec2_instance_studentb" {
 resource "aws_instance" "aws_ec2_instance_studentc" {
   ami           = var.ami_id
   instance_type = var.instance_type
-  count         = var.number_of_instances
+  count         = var.number_of_students
 
   vpc_security_group_ids      = [aws_security_group.aws_rke2_sg.id]
   subnet_id                   = aws_subnet.aws_rke2_subnet.id
@@ -74,8 +76,9 @@ resource "aws_instance" "aws_ec2_instance_studentc" {
   key_name                    = var.key_pair_name
 
   user_data = templatefile("${var.user_data_studentc}", {
-    DOMAIN  = var.domain
+    DOMAIN  = "${var.domain}"
     NUM     = "${count.index + 1}"
+    HOSTNAME = "student${count.index + 1}c.${var.domain}"
   })
 
   tags = {

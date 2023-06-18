@@ -48,9 +48,9 @@ variable "instance_type" {
   description = "(Required) The AWS Instance type to use for the instance(s)."
 }
 
-variable "number_of_instances" {
-  default     = 3
-  description = "(Required) The number of AWS EC2 instances to create on deployment."
+variable "number_of_students" {
+  default     = 1
+  description = "(Required) The number of students to use for the instance(s)."
 }
 
 variable "associate_public_ip_address" {

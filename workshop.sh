@@ -1,12 +1,14 @@
 #!/bin/bash
-
-set -ebpf
+###################################
+# edit vars
+###################################
+set -e
 
 num=3
 prefix=student
 password=Pa22word
 zone=nyc3
-size=s-4vcpu-8gb-amd
+size=s-4vcpu-8gb-intel
 key=65:04:dc:73:0f:7c:b7:20:21:82:14:d6:d3:d7:b2:d2
 image=rockylinux-9-x64
 domain=rancherfederal.training
@@ -18,10 +20,8 @@ export GREEN='\x1b[32m'
 export BLUE='\x1b[34m'
 export NO_COLOR='\x1b[0m'
 
-### error checking
 command -v pdsh >/dev/null 2>&1 || { echo -e "$RED" " ** Pdsh was not found. Please install before preceeding. ** " "$NO_COLOR" >&2; exit 1; }
 
-### doctl list
 function dolist () { doctl compute droplet list --no-header|grep $prefix |sort -k 2 | awk '{ print $2" "$3" "$4" "$5" "$6" "$7" "$8" "$9}'; }
 
 function up () {
@@ -51,11 +51,11 @@ master_list=$(dolist | awk '/a/{printf $2","}' | sed 's/,$//')
 
 echo -n " updating dns "
 for i in $(seq 1 $num); do
- doctl compute domain records create $domain --record-type A --record-name $prefix"$i"a --record-ttl 60 --record-data $(dolist |grep $prefix"$i"a|awk '{print $2}') > /dev/null 2>&1
- doctl compute domain records create $domain --record-type A --record-name $prefix"$i"b --record-ttl 60 --record-data $(dolist |grep $prefix"$i"b|awk '{print $2}') > /dev/null 2>&1
- doctl compute domain records create $domain --record-type A --record-name $prefix"$i"c --record-ttl 60 --record-data $(dolist |grep $prefix"$i"c|awk '{print $2}') > /dev/null 2>&1
- doctl compute domain records create $domain --record-type A --record-name $i --record-ttl 60 --record-data $(dolist |grep $prefix"$i"a|awk '{print $2}') > /dev/null 2>&1
- doctl compute domain records create $domain --record-type CNAME --record-name "*.$i" --record-ttl 60 --record-data "$i".$domain. > /dev/null 2>&1
+ doctl compute domain records create $domain --record-type A --record-name $prefix"$i"a --record-ttl 150 --record-data $(dolist |grep $prefix"$i"a|awk '{print $2}') > /dev/null 2>&1
+ doctl compute domain records create $domain --record-type A --record-name $prefix"$i"b --record-ttl 150 --record-data $(dolist |grep $prefix"$i"b|awk '{print $2}') > /dev/null 2>&1
+ doctl compute domain records create $domain --record-type A --record-name $prefix"$i"c --record-ttl 150 --record-data $(dolist |grep $prefix"$i"c|awk '{print $2}') > /dev/null 2>&1
+ doctl compute domain records create $domain --record-type A --record-name $i --record-ttl 150 --record-data $(dolist |grep $prefix"$i"a|awk '{print $2}') > /dev/null 2>&1
+ doctl compute domain records create $domain --record-type CNAME --record-name "*.$i" --record-ttl 150 --record-data "$i".$domain. > /dev/null 2>&1
  sleep 1
 done
 echo -e "$GREEN" "ok" "$NO_COLOR"

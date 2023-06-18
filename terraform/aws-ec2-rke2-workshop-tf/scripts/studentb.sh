@@ -5,6 +5,7 @@ set -ebpf
 ### Set Variables
 export DOMAIN=${DOMAIN}
 export NUM=${NUM}
+export HOSTNAME=${HOSTNAME}
 
 ### Applying System Settings
 cat << EOF >> /etc/sysctl.conf
@@ -74,8 +75,12 @@ echo -e "[keyfile]\nunmanaged-devices=interface-name:cali*;interface-name:flanne
 yum update -y && yum clean all
 
 ### Setting Instance Environment
-echo $(hostname| sed -e "s/student//" -e "s/a//" -e "s/b//" -e "s/c//") > /root/NUM; echo "export NUM=\$(cat /root/NUM)" >> .bashrc
-echo "export ipa=\$(getent hosts student\"\$NUM\"a.'$DOMAIN'|awk '"'"'{print \$1}'"'"')" >> .bashrc
-echo "export ipb=\$(getent hosts student\"\$NUM\"b.'$DOMAIN'|awk '"'"'{print \$1}'"'"')" >> .bashrc
-echo "export ipc=\$(getent hosts student\"\$NUM\"c.'$DOMAIN'|awk '"'"'{print \$1}'"'"')" >> .bashrc
-echo "export PATH=\$PATH:/opt/bin" >> .bashrc
+hostname $HOSTNAME
+echo -e "export HOME=/root" >> ~/.bashrc
+echo -e "export PATH=\$PATH:/opt/bin" >> ~/.bashrc
+
+### Setting Bash Environment
+echo -e "export ipa=student${NUM}a.$DOMAIN" >> ~/.bashrc
+echo -e "export ipb=student${NUM}b.$DOMAIN" >> ~/.bashrc
+echo -e "export ipc=student${NUM}c.$DOMAIN" >> ~/.bashrc
+source ~/.bashrc
