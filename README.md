@@ -39,18 +39,18 @@ Before we get started, I wanted to shout out to **[@clemenko](https://github.com
 * An awesome demo application or two :)
 
 ## Workshop Outcomes
-* Ability to Configure/Deploy/Install Rancher Kubernetes (RKE2), Rancher Multi-Cluster Manager, Rancher Longhorn, and Rancher NeuVector.
-* Ability to Configure/Deploy Rancher Fleet and GitOps intergration within Kubernetes clusters (Fleet <-> Gitea).
-* Understanding of the complexitites and challenges within Kubernetes and the simplicity within Rancher.
-* Understanding of Cluster and Application Lifecycle Management, within Kubernetes clusters.
-* Understanding of best practices around Infrastructure As Code (IaC), Security, and Compliance, within Kubernetes clusters.
+*	Ability to Configure/Deploy/Install Rancher Kubernetes (RKE2), Rancher Multi*Cluster Manager, Rancher Longhorn, and Rancher NeuVector.
+*	Ability to Configure/Deploy Rancher Fleet and GitOps integration within Kubernetes clusters (Fleet <*> Gitea).
+*	Understanding of the complexities and challenges within Kubernetes and the simplicity within Rancher.
+*	Understanding of Cluster and Application Lifecycle Management, within Kubernetes clusters.
+*	Understanding of best practices around Infrastructure As Code (IaC), Security, and Compliance, within Kubernetes clusters.
 
 ## Infrastructure
 
 ### Prerequistes
 
 * Basic Linux command line skills
-* Familiarity with a text editor (VSCode aka Code-Server)
+* Familiarity with a text editor (VSCode aka Code Server)
 * Every student has 3 vms.
   * The instructor will assign the student a number.
   * Rocky Linux 9
