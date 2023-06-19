@@ -75,7 +75,7 @@ echo -e "[keyfile]\nunmanaged-devices=interface-name:cali*;interface-name:flanne
 yum update -y && yum clean all
 
 ### Setting Instance Environment
-hostname $HOSTNAME
+hostnamectl set-hostname $HOSTNAME
 echo -e "export HOME=/root" >> ~/.bashrc
 echo -e "export PATH=\$PATH:/opt/bin" >> ~/.bashrc
 

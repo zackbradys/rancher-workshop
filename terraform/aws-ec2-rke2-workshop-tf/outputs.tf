@@ -1,5 +1,5 @@
 output "timestamp" {
-  value       = timestamp()
+  value       = [timestamp()]
   description = "Create/Update Timestamp"
 }
 
