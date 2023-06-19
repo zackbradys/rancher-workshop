@@ -7,7 +7,7 @@ metadata:
     kubernetes.io/ingress.class: "nginx"
 spec:
   rules:
-  - host: ghost.$NUM.rfed.run
+  - host: ghost.$NUM.rancherfederal.training
     http:
       paths:
       - path: /
@@ -51,10 +51,8 @@ spec:
       volumes:
       - name: ghost
         persistentVolumeClaim:
-          claimName: ghost
-          
+          claimName: ghost       
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -69,7 +67,6 @@ spec:
     protocol: TCP
     port: 2368
     targetPort: 2368
-
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -83,4 +80,3 @@ spec:
   resources:
     requests:
       storage: 1Gi
-

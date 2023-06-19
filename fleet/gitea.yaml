@@ -1,3 +1,4 @@
+# Rancher Fleet GitRepo Resources
 kind: GitRepo
 apiVersion: fleet.cattle.io/v1alpha1
 metadata:
@@ -6,12 +7,11 @@ metadata:
 spec:
   branch: main
   insecureSkipTLSVerify: true
-  repo: https://git.$NUM.rfed.run/gitea/workshop
+  repo: https://git.$NUM.rancherfederal.training/gitea/workshop
   targetNamespace: flask
   paths:
   - fleet/flask
 ---
-
 kind: GitRepo
 apiVersion: fleet.cattle.io/v1alpha1
 metadata:
@@ -20,13 +20,11 @@ metadata:
 spec:
   branch: main
   insecureSkipTLSVerify: true
-  repo: https://git.$NUM.rfed.run/gitea/workshop
+  repo: https://git.$NUM.rancherfederal.training/gitea/workshop
   targetNamespace: whoami
   paths:
   - fleet/whoami
-
 ---
-
 kind: GitRepo
 apiVersion: fleet.cattle.io/v1alpha1
 metadata:
@@ -35,7 +33,62 @@ metadata:
 spec:
   branch: main
   insecureSkipTLSVerify: true
-  repo: https://git.$NUM.rfed.run/gitea/workshop
+  repo: https://git.$NUM.rancherfederal.training/gitea/workshop
   targetNamespace: ghost
   paths:
   - fleet/ghost
+---
+# Rancher Manager NavLinks Resources
+apiVersion: ui.cattle.io/v1
+kind: NavLink
+metadata:
+  name: flask
+spec:
+  label: Flask
+  target: _blank
+  description: Flask Demo Application
+  group: Demo Applications
+  label: Flask Demo App
+  sideLabel: Flask
+  toService:
+    name: flask
+    namespace: flask
+    port: "5000"
+    path: /
+    scheme: http
+---
+apiVersion: ui.cattle.io/v1
+kind: NavLink
+metadata:
+  name: whoami
+spec:
+  label: whoami
+  target: _blank
+  description: WHOAMI Application
+  group: Demo Applications
+  label: WHOAMI Demo App
+  sideLabel: WHOAMI
+  toService:
+    name: whoami
+    namespace: whoami
+    port: "5000"
+    path: /
+    scheme: http
+---
+apiVersion: ui.cattle.io/v1
+kind: NavLink
+metadata:
+  name: ghost
+spec:
+  label: ghost
+  target: _blank
+  description: Ghost Application
+  group: Demo Applications
+  label: Ghost Demo App
+  sideLabel: GHOST
+  toService:
+    name: ghost
+    namespace: ghost
+    port: "5000"
+    path: /
+    scheme: http

@@ -46,7 +46,7 @@ Before we get started, I wanted to shout out to **[@clemenko](https://github.com
 * Every student has 3 vms.
   * The instructor will assign the student a number.
   * Rocky Linux 9
-* ASK QUESTIONS!
+* ASK QUESTIONS!! PARTICIPATE!
 
 ### Student Environment Signup
 
@@ -57,6 +57,27 @@ http://workshop-signup.rancherfederal.io
 Access URL: `http://student$NUMa.rancherfederal.training:8080`
 
 Password = `Pa22word`
+
+Once logged into code server, open the menu in the top left corner, click on terminal, then click on new terminal, do this two times. 
+
+```bash
+### In the first terminal type:
+ssh $studentb
+```
+
+```bash
+### In the second terminal type:
+ssh $studentc
+```
+
+```bash
+### Example URLS in the Workshop:
+SSH --> http://student1a.rancherfederal.training
+Rancher --> https://rancher.1.rancherfederal.training
+Longhorn --> https://longhorn.1.rancherfederal.training
+NeuVector --> https://neuvector.1.rancherfederal.training
+Gitea --> https://git.1.rancherfederal.training
+```
 
 ### DISA STIGS?!!
 
@@ -70,15 +91,13 @@ We even have a tldr for Rancher [here](https://github.com/clemenko/rancher_stig)
 
 ## Rancher RKE2
 
-If you are bored you can read the [docs](https://docs.rke2.io/). For speed, we are completing an online installation.
+If you are bored you can read the [docs](https://docs.rke2.io/). *Note we are installing the connected method for speed.*
 
-There is another git repository with all the air-gapping instructions [https://github.com/clemenko/rke_airgap_install](https://github.com/clemenko/rke_airgap_install).
-
-Heck [watch the video](https://www.youtube.com/watch?v=IkQJc5-_duo).
+We have another guide and git repository with all the air-gapping instructions [https://github.com/clemenko/rke_airgap_install](https://github.com/clemenko/rke_airgap_install). Including an easy way to test the full stack airgapped!
 
 ### studenta
 
-SSH in and run the following commands. Take your time. Some commands can take a few minutes.
+Copy and paste the commands below on the **`studenta`** server. Make sure to take your time, some can take a few minutes! Here's where we can talk about the configuration options and how RKE2 works behind the scenes.
 
 ```bash
 ### Setup RKE2 Server
@@ -116,7 +135,7 @@ kubelet-arg:
 - streaming-connection-idle-timeout=5m
 - max-pods=200
 cloud-provider-name: aws
-token=RGSsuperduperfunWorkshop
+token: RGSsuperduperfunWorkshop
 EOF
 
 ### Configure RKE2 Audit Policy
@@ -156,9 +175,10 @@ systemctl enable --now rke2-server.service
 
 ```bash
 ### Wait and Add Links
-export KUBECONFIG=/etc/rancher/rke2/rke2.yaml
 sudo ln -s /var/lib/rancher/rke2/data/v1*/bin/kubectl /usr/bin/kubectl
 sudo ln -s /var/run/k3s/containerd/containerd.sock /var/run/containerd/containerd.sock
+export KUBECONFIG=/etc/rancher/rke2/rke2.yaml 
+export PATH=$PATH;/var/lib/rancher/rke2/bin;/usr/local/bin/
 
 ### Verify RKE2 Kubectl
 kubectl get nodes -o wide
@@ -166,7 +186,7 @@ kubectl get nodes -o wide
 
 ### studentb and studentc
 
-Let's run the same commands on the other two servers, studentb and studentc.
+Let's copy and paste the commands below on the **`studentb`** and **`studentc`** server. Notice how we are configuring and install the RKE2 Agent versus the RKE2 Server. These should be fairly quick!
 
 ```bash
 ### Setup RKE2 Agent
@@ -183,7 +203,7 @@ kubelet-arg:
 - streaming-connection-idle-timeout=5m
 - max-pods=200
 cloud-provider-name: aws
-server: https://$ipa:9345
+server: https://student${NUM}a.${DOMAIN}:9345
 token: RGSsuperduperfunWorkshop
 EOF
 ```
@@ -199,120 +219,144 @@ systemctl enable --now rke2-agent.service
 
 ## Rancher Multi Cluster Manager
 
-For time, let's install Rancher in an online fashion.
+Now let's move on to installing the management layer of Rancher, known as the [Rancher Multi-Cluster Manager](https://rancher.com/products/rancher). Head back to the **`student1a`** server and copy and paste the commands below.
 
-Note we are installing online for speed. Please see the [Air Gap Install](https://longhorn.io/docs/1.3.2/advanced-resources/deploy/airgap/#using-a-helm-chart) guide.
+*Note we are installing the connected method for speed. Please see the [Rancher Manager - Air Gap Install Guide](https://ranchermanager.docs.rancher.com/pages-for-subheaders/air-gapped-helm-cli-install).*
 
 ```bash
-# add repos
+### Add Required Helm Repos
 helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
 helm repo add jetstack https://charts.jetstack.io
 helm repo update
 
-# install cert-mamanger
-helm upgrade -i cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --set installCRDs=true
+### Create the Cert Manager Namespace and Install Cert Manager
+kubectl create namespace cert-manager
 
-# now for rancher
-helm upgrade -i rancher rancher-latest/rancher --namespace cattle-system --create-namespace --set hostname=rancher.$NUM.rancherfederal.training --set bootstrapPassword=Pa22word --set replicas=1 --set auditLog.level=2 --set auditLog.destination=hostPath
+helm upgrade -i cert-manager jetstack/cert-manager --namespace cert-manager --set installCRDs=true 
 
-# go to page
-echo "---------------------------------------------------------"
-echo " control/command click : http://rancher.$NUM.rancherfederal.training"
-echo "---------------------------------------------------------"
+sleep 10
 
+### Verify the status of Cert Manager
+kubectl get pods --namespace cert-manager
+
+### Create the Rancher Namespace and Install Rancher
+kubectl create namespace cattle-system
+
+helm upgrade -i rancher rancher-latest/rancher --namespace cattle-system --set replicas=1 --set auditLog.level=2 --set auditLog.destination=hostPath --set bootstrapPassword=Pa22word --set hostname=rancher.$NUM.$DOMAIN
+
+sleep 20
+
+### Verify the status of the Rancher Manager
+kubectl get pods --namespace cattle-system
+
+### Open the Rancher Manager
+echo ""
+echo ""
+echo " control/command click --> https://rancher.$NUM.$DOMAIN"
 ```
 
-The username is `admin`.
-The password is `Pa22word`.
+The username will be **`admin`** and the password will be **`Pa22word`**.
 
 ## Rancher Longhorn
 
-Here is the easiest way to build stateful storage on this cluster. [Longhorn](https://longhorn.io) from Rancher is awesome. Lets deploy from the first node.
+One the easiest ways to have stateful storage on this cluster is using [Rancher Longhorn](https://rancher.com/products/longhorn). Not only does it intergrate really well, but it provides a lot of functionality with little configuration. Let's deploy it. Head back to the **`student1a`** server and copy and paste the commands below.
 
-Note we are installing online for speed. Please see the [Air Gap Install](https://longhorn.io/docs/1.3.2/advanced-resources/deploy/airgap/#using-a-helm-chart) guide.
+*Note we are installing the connected method for speed. Please see the [Longhorn - Air Gap Install Guide](https://longhorn.io/docs/1.4.2/advanced-resources/deploy/airgap/).*
 
 ```bash
-# kubectl apply
+### Add Required Helm Repos
 helm repo add longhorn https://charts.longhorn.io
 helm repo update
-helm upgrade -i longhorn longhorn/longhorn --namespace longhorn-system --create-namespace --set ingress.enabled=true --set ingress.host=longhorn.$NUM.rancherfederal.training
 
-# to verify that longhorn is the default storage class
+### Create the Longhorn Namespace and Install Longhorn
+kubectl create namespace longhorn-system
+
+helm upgrade -i longhorn longhorn/longhorn --namespace longhorn-system --set ingress.enabled=true --set ingress.secureBackends=true --set ingress.host=longhorn.$NUM.$DOMAIN
+
+# Verify that Longhorn is the default storage class
 kubectl get sc
 
-# add encrypted storage class
+# Let's add an Encrypted Storage Class!
 kubectl apply -f https://raw.githubusercontent.com/clemenko/k8s_yaml/master/longhorn_encryption.yml
 
-# go to page
-echo "---------------------------------------------------------"
-echo " control/command click : http://longhorn.$NUM.rancherfederal.training"
-echo "---------------------------------------------------------"
+sleep 30
 
-# Watch it coming up
-watch kubectl get pod -n longhorn-system
+### Verify the status of Longhorn
+kubectl get pods --namespace longhorn-system
+
+### Open the Longhorn Dashboard
+echo " control/command click --> https://longhorn.$NUM.$DOMAIN"
 ```
 
-Once everything is running we can move on.
+There should be no username or password.
 
 ## Rancher NeuVector
 
-If we have time we can start to look at a security layer tool for Kubernetes, https://neuvector.com/. They have fairly good [docs here](https://open-docs.neuvector.com/).
+Finally, let's deploy the security layer of Rancher, known as [Rancher NeuVector](https://neuvector.com). Head back to the **`student1a`** server and copy and paste the commands below.
 
-Note we are installing online for speed. Please see the [Air Gap Install](https://longhorn.io/docs/1.3.2/advanced-resources/deploy/airgap/#using-a-helm-chart) guide.
+*Note we are installing the connected method for speed. Please see the [NeuVector - Air Gap Install Guide](https://open-docs.neuvector.com/deploying/airgap).*
 
 ```bash
+### Add Required Helm Repos
 helm repo add neuvector https://neuvector.github.io/neuvector-helm/
 helm repo update
 
-helm upgrade -i neuvector --namespace neuvector neuvector/core --create-namespace  --set imagePullSecrets=regsecret --set k3s.enabled=true --set k3s.runtimePath=/run/k3s/containerd/containerd.sock --set manager.ingress.enabled=true --set manager.ingress.host=neuvector.$NUM.rancherfederal.training
+### Create the NeuVector Namespace and Install NeuVector
+kubectl create namespace cattle-neuvector-system
 
-# go to page
-echo "---------------------------------------------------------"
-echo " control/command click : http://neuvector.$NUM.rancherfederal.training"
-echo "---------------------------------------------------------"
+helm upgrade -i neuvector neuvector/core --namespace cattle-neuvector-system --set k3s.enabled=true --set k3s.runtimePath=/run/k3s/containerd/containerd.sock --set manager.ingress.enabled=true --set controller.pvc.enabled=true --set global.cattle.url=https://rancher.$NUM.$DOMAIN --set controller.ranchersso.enabled=true --set rbac=true --set psp=true --set manager.ingress.host=neuvector.$NUM.$DOMAIN
+
+sleep 30
+
+### Verify the status of NeuVector
+kubectl get pods --namespace cattle-neuvector-system
+
+### Open the NeuVector Dashboard!
+echo " control/command click --> https://neuvector.$NUM.$DOMAIN"
 ```
 
-The username is `admin`.
-The password is `admin`.
+The username will be **`admin`** and the password will be **`admin`**.
 
+## Fleet and Gitea
 
-## Gitea and Fleet
+Why not test out Rancher Fleet and add our own version control? If we have some extra time.
 
-Why not add version control? If we have time.
+To deploy Gitea, head back to the **`student1a`** server and copy and paste the commands below.
 
 ```bash
+### Add Required Helm Repos
 helm repo add gitea-charts https://dl.gitea.io/charts/
 helm repo update
 
-helm upgrade -i gitea gitea-charts/gitea --namespace gitea --create-namespace --set gitea.admin.password=Pa22word --set gitea.admin.username=gitea --set persistence.size=500Mi --set postgresql.persistence.size=500Mi --set gitea.config.server.ROOT_URL=http://git.$NUM.rancherfederal.training --set gitea.config.server.DOMAIN=git.$NUM.rancherfederal.training --set ingress.enabled=true --set ingress.hosts[0].host=git.$NUM.rancherfederal.training --set ingress.hosts[0].paths[0].path=/ --set ingress.hosts[0].paths[0].pathType=Prefix
+### Create the Gitea Namespace and Install Gitea
+kubectl create namespace gitea-system
 
-# wait for it to complete
-watch kubectl get pod -n gitea
+helm upgrade -i gitea gitea-charts/gitea --namespace gitea-system --set gitea.admin.password=Pa22word --set gitea.admin.username=gitea --set persistence.size=1Gi --set postgresql.persistence.size=1Gi --set gitea.config.server.ROOT_URL=http://git.$NUM.$DOMAIN --set gitea.config.server.DOMAIN=git.$NUM.$DOMAIN --set ingress.enabled=true --set ingress.hosts[0].host=git.$NUM.$DOMAIN --set ingress.hosts[0].paths[0].path=/ --set ingress.hosts[0].paths[0].pathType=Prefix
+
+sleep 30
+
+### Verify the status of Gitea
+kubectl get pods --namespace gitea-system
+
+### Open the Gitea Dashboard!
+echo " control/command click --> https://git.$NUM.$DOMAIN"
 ```
 
-Once everything is up. We can mirror a demo repo.
+The username will be **`gitea`** and the password will be **`Pa22word`**. Once everything is running, we can mirror a demo repo!
+
+After Gitea finishes deploying, head back to the **`student1a`** server and copy and paste the commands below.
 
 ```bash
-# now lets mirror
-curl -X POST 'http://git.'$NUM'.rancherfederal.training/api/v1/repos/migrate' -H 'accept: application/json' -H 'authorization: Basic Z2l0ZWE6UGEyMndvcmQ=' -H 'Content-Type: application/json' -d '{ "clone_addr": "https://github.com/clemenko/rke_workshop", "repo_name": "workshop","repo_owner": "gitea"}'
-
-# go to page
-echo "---------------------------------------------------------"
-echo " control/command click : http://git.$NUM.rancherfederal.training"
-echo "---------------------------------------------------------"
+### Mirror Workshop Git Repository
+curl -X POST 'http://git.'$NUM'.'$DOMAIN'/api/v1/repos/migrate' -H 'accept: application/json' -H 'authorization: Basic Z2l0ZWE6UGEyMndvcmQ=' -H 'Content-Type: application/json' -d '{ "clone_addr": "https://github.com/zackbradys/rancher-workshop", "repo_name": "workshop","repo_owner": "gitea"}'
 ```
 
-The username is `gitea`.
-The password is `Pa22word`.
+Before we deploy our GitRepo with Fleet, we need to edit our **`gitrepo.yaml`** located at **`http://git.$NUM.rancherfederal.training/gitea/workshop/src/branch/main/fleet/gitea.yaml`**. Updated all occurances of **`"$NUM"`** to your student number.
 
-We need to edit fleet yaml : http://git.$NUM.rancherfederal.training/gitea/workshop/src/branch/main/fleet/gitea.yaml . Change "$NUM" to your student number.
-
-Once edited we can add to fleet with:
+Once we commit all changes, head back to the **`student1a`** server and copy and paste the commands below.
 
 ```bash
-# patch
-kubectl patch clusters.fleet.cattle.io -n fleet-local local --type=merge -p '{"metadata": {"labels":{"name":"local"}}}'
-kubectl apply -f http://git.$NUM.rancherfederal.training/gitea/workshop/raw/branch/main/fleet/gitea.yaml
+kubectl apply -f http://git.$NUM.$DOMAIN/gitea/workshop/raw/branch/main/fleet/gitea.yaml
 ```
 
 ## Questions/Comments

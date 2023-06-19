@@ -80,9 +80,12 @@ echo -e "export HOME=/root" >> ~/.bashrc
 echo -e "export PATH=\$PATH:/opt/bin" >> ~/.bashrc
 
 ### Setting Bash Environment
-echo -e "export ipa=student${NUM}a.$DOMAIN" >> ~/.bashrc
-echo -e "export ipb=student${NUM}b.$DOMAIN" >> ~/.bashrc
-echo -e "export ipc=student${NUM}c.$DOMAIN" >> ~/.bashrc
+echo -e "export DOMAIN=$DOMAIN" >> ~/.bashrc
+echo -e "export NUM=$NUM" >> ~/.bashrc
+echo -e "export HOSTNAME=$HOSTNAME" >> ~/.bashrc
+echo -e "export studenta=student${NUM}a.${DOMAIN}" >> ~/.bashrc
+echo -e "export studentb=student${NUM}b.${DOMAIN}" >> ~/.bashrc
+echo -e "export studentc=student${NUM}c.${DOMAIN}" >> ~/.bashrc
 source ~/.bashrc
 
 ### Install Helm
