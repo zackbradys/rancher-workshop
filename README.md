@@ -259,8 +259,8 @@ kubectl get pods --namespace cattle-system
 
 ### Open the Rancher Manager
 echo ""
-echo ""
 echo " control/command click --> https://rancher.$NUM.$DOMAIN"
+echo ""
 ```
 
 The username will be **`admin`** and the password will be **`Pa22word`**.
@@ -293,7 +293,9 @@ kubectl apply -f https://raw.githubusercontent.com/clemenko/k8s_yaml/master/long
 kubectl get pods --namespace longhorn-system
 
 ### Open the Longhorn Dashboard
+echo ""
 echo " control/command click --> https://longhorn.$NUM.$DOMAIN"
+echo ""
 ```
 
 There should be no username or password.
@@ -320,7 +322,9 @@ sleep 30
 kubectl get pods --namespace cattle-neuvector-system
 
 ### Open the NeuVector Dashboard!
+echo ""
 echo " control/command click --> https://neuvector.$NUM.$DOMAIN"
+echo ""
 ```
 
 The username will be **`admin`** and the password will be **`admin`**.
@@ -347,7 +351,9 @@ sleep 30
 kubectl get pods --namespace gitea-system
 
 ### Open the Gitea Dashboard!
+echo ""
 echo " control/command click --> https://git.$NUM.$DOMAIN"
+echo ""
 ```
 
 The username will be **`gitea`** and the password will be **`Pa22word`**. Once everything is running, we can mirror a demo repo!
@@ -359,7 +365,9 @@ After Gitea finishes deploying, head back to the **`student1a`** server and copy
 curl -X POST 'http://git.'$NUM'.'$DOMAIN'/api/v1/repos/migrate' -H 'accept: application/json' -H 'authorization: Basic Z2l0ZWE6UGEyMndvcmQ=' -H 'Content-Type: application/json' -d '{ "clone_addr": "https://github.com/zackbradys/rancher-workshop", "repo_name": "workshop","repo_owner": "gitea"}'
 ```
 
-Before we deploy our GitRepo with Fleet, we need to edit our **`gitrepo.yaml`** located at **`http://git.$NUM.rancherfederal.training/gitea/workshop/src/branch/main/fleet/gitea.yaml`**. Updated all occurances of **`"$NUM"`** to your student number.
+Before we deploy our GitRepo with Fleet, we need to edit our **`gitrepo.yaml`** located at **`http://git.$NUM.rancherfederal.training/gitea/workshop/src/branch/main/fleet/gitea.yaml`**. 
+
+Update all occurances of **`"$NUM"`** to your student number.
 
 Once we commit all changes, head back to the **`student1a`** server and copy and paste the commands below.
 
