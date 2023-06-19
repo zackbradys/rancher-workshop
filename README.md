@@ -5,13 +5,14 @@
 ### Table of Contents
 * [About Me](#about-me)
 * [Introduction](#introduction)
+* [Workshop Outcomes](#workshop-outcomes)
 * [Infrastructure](#infrastructure)
 * [Rancher RKE2](#rancher-rke2)
 * [Rancher Multi Cluster Manager](#rancher-multi-cluster-manager)
 * [Rancher Longhorn](#rancher-longhorn)
 * [Rancher NeuVector](#rancher-neuvector)
-* [Gitea and Fleet](#gitea-and-fleet)
-* [Questions/Comments](#questions/comments)
+* [Rancher Fleet and Gitea](#rancher-fleet-and-gitea)
+* [Questions and Comments](#questions-and-comments)
 
 ## About Me
 A little bit about me, my history, and what I've done in the industry. 
@@ -36,6 +37,12 @@ Before we get started, I wanted to shout out to **[@clemenko](https://github.com
 * Longhorn (Storage) - [learn more](https://www.rancher.com/products/longhorn)
 * Neuvector (Security) - [learn more](https://ranchergovernment.com/neuvector)
 * An awesome demo application or two :)
+
+## Workshop Outcomes
+* Ability to Configure/Deploy/Install Rancher Kubernetes (RKE2), Rancher Multi-Cluster Manager, Longhorn, and NeuVector.
+* Understanding of Rancher Fleet and GitOps Intergration within Kubernetes clusters (Fleet <-> Gitea).
+* Understanding of the complexitites and challenges within Kubernetes and the simplicity within Rancher.
+* Understanding of Cluster and Application Lifecycle Management, within Kubernetes clusters.
 
 ## Infrastructure
 
@@ -276,10 +283,10 @@ helm upgrade -i longhorn longhorn/longhorn --namespace longhorn-system --set ing
 # Verify that Longhorn is the default storage class
 kubectl get sc
 
-# Let's add an Encrypted Storage Class!
-kubectl apply -f https://raw.githubusercontent.com/clemenko/k8s_yaml/master/longhorn_encryption.yml
+sleep 40
 
-sleep 30
+### Let's add an Encrypted Storage Class!
+kubectl apply -f https://raw.githubusercontent.com/clemenko/k8s_yaml/master/longhorn_encryption.yml
 
 ### Verify the status of Longhorn
 kubectl get pods --namespace longhorn-system
@@ -317,7 +324,7 @@ echo " control/command click --> https://neuvector.$NUM.$DOMAIN"
 
 The username will be **`admin`** and the password will be **`admin`**.
 
-## Fleet and Gitea
+## Rancher Fleet and Gitea
 
 Why not test out Rancher Fleet and add our own version control? If we have some extra time.
 
@@ -359,6 +366,6 @@ Once we commit all changes, head back to the **`student1a`** server and copy and
 kubectl apply -f http://git.$NUM.$DOMAIN/gitea/workshop/raw/branch/main/fleet/gitea.yaml
 ```
 
-## Questions/Comments
+## Questions and Comments
 
-Workshop Completed! Nice. How do we feel?
+Workshop Completed! Nice. How do we feel? We'll review the workshop outcomes to see if we missed anything.
