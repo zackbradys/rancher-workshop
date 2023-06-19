@@ -33,6 +33,11 @@ variable "domain" {
   default     = ""
   description = "(Required) The AWS Route53 Domain to use for the instance(s)."
 }
+
+variable "number_of_students" {
+  default     = 30
+  description = "(Required) The number of students to use for the instance(s)."
+}
 ```
 
 **Step 3:** Run the Terraform commands:

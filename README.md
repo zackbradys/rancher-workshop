@@ -13,7 +13,6 @@
 * [Gitea and Fleet](#gitea-and-fleet)
 * [Questions/Comments](#questions/comments)
 
-
 ## About Me
 A little bit about me, my history, and what I've done in the industry. 
 - DOD/IC Contractor
@@ -21,7 +20,6 @@ A little bit about me, my history, and what I've done in the industry.
 - Open-Source Contributor
 - Built and Exited a Digital Firm
 - Active Volunteer Firefighter/EMT
-
 
 ## Introduction
 
@@ -83,51 +81,119 @@ Heck [watch the video](https://www.youtube.com/watch?v=IkQJc5-_duo).
 SSH in and run the following commands. Take your time. Some commands can take a few minutes.
 
 ```bash
+### Setup RKE2 Server
+mkdir -p /opt/rke2-artifacts
+cd /opt/rke2-artifacts
 useradd -r -c "etcd user" -s /sbin/nologin -M etcd -U
 mkdir -p /etc/rancher/rke2/ /var/lib/rancher/rke2/server/manifests/
 
-# set up basic config.yaml
-echo -e "#profile: cis-1.6\nselinux: true\nsecrets-encryption: true\nwrite-kubeconfig-mode: 0600\nstreaming-connection-idle-timeout: 5m\nkube-controller-manager-arg:\n- bind-address=127.0.0.1\n- use-service-account-credentials=true\n- tls-min-version=VersionTLS12\n- tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\nkube-scheduler-arg:\n- tls-min-version=VersionTLS12\n- tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\nkube-apiserver-arg:\n- tls-min-version=VersionTLS12\n- tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\n- authorization-mode=RBAC,Node\n- anonymous-auth=false\n- audit-policy-file=/etc/rancher/rke2/audit-policy.yaml\n- audit-log-mode=blocking-strict\n- audit-log-maxage=30\nkubelet-arg:\n- protect-kernel-defaults=true\n- read-only-port=0\n- authorization-mode=Webhook" > /etc/rancher/rke2/config.yaml
+### Configure RKE2 Config
+cat << EOF >> /etc/rancher/rke2/config.yaml
+#profile: cis-1.6
+selinux: true
+secrets-encryption: true
+write-kubeconfig-mode: 0600
+kube-controller-manager-arg:
+- bind-address=127.0.0.1
+- use-service-account-credentials=true
+- tls-min-version=VersionTLS12
+- tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+kube-scheduler-arg:
+- tls-min-version=VersionTLS12
+- tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+kube-apiserver-arg:
+- tls-min-version=VersionTLS12
+- tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+- authorization-mode=RBAC,Node
+- anonymous-auth=false
+- audit-policy-file=/etc/rancher/rke2/audit-policy.yaml
+- audit-log-mode=blocking-strict
+- audit-log-maxage=30
+kubelet-arg:
+- protect-kernel-defaults=true
+- read-only-port=0
+- authorization-mode=Webhook
+- streaming-connection-idle-timeout=5m
+- max-pods=200
+cloud-provider-name: aws
+token=RGSsuperduperfunWorkshop
+EOF
 
-# set up audit policy file
-echo -e "apiVersion: audit.k8s.io/v1\nkind: Policy\nrules:\n- level: RequestResponse" > /etc/rancher/rke2/audit-policy.yaml
+### Configure RKE2 Audit Policy
+cat << EOF >> /etc/rancher/rke2/audit-policy.yaml
+apiVersion: audit.k8s.io/v1
+kind: Policy
+rules:
+- level: RequestResponse
+EOF
 
-# set up ssl passthrough for nginx
-echo -e "---\napiVersion: helm.cattle.io/v1\nkind: HelmChartConfig\nmetadata:\n  name: rke2-ingress-nginx\n  namespace: kube-system\nspec:\n  valuesContent: |-\n    controller:\n      config:\n        use-forwarded-headers: true\n      extraArgs:\n        enable-ssl-passthrough: true" > /var/lib/rancher/rke2/server/manifests/rke2-ingress-nginx-config.yaml; 
+### Congiure NGINX Policies
+cat << EOF >> /var/lib/rancher/rke2/server/manifests/rke2-ingress-nginx-config.yaml
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: rke2-ingress-nginx
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    controller:
+      config:
+        use-forwarded-headers: true
+      extraArgs:
+        enable-ssl-passthrough: true
+EOF
+```
 
-# server install options https://docs.rke2.io/install/install_options/server_config/
-# online install
-curl -sfL https://get.rke2.io | INSTALL_RKE2_CHANNEL=v1.24 sh - 
+```bash
+### Download and Install RKE2 Server
+### Install Options --> https://docs.rke2.io/install/install_options/server_config/
+curl -sfL https://get.rke2.io | INSTALL_RKE2_CHANNEL=v1.24 INSTALL_RKE2_TYPE=server sh - 
 
-# start all the things
+### Enable and Start the RKE2 Server
 systemctl enable --now rke2-server.service
+```
 
-# wait and add link
-export KUBECONFIG=/etc/rancher/rke2/rke2.yaml 
-ln -s /var/lib/rancher/rke2/data/v1*/bin/kubectl  /usr/local/bin/kubectl
+```bash
+### Wait and Add Links
+export KUBECONFIG=/etc/rancher/rke2/rke2.yaml
+sudo ln -s /var/lib/rancher/rke2/data/v1*/bin/kubectl /usr/bin/kubectl
+sudo ln -s /var/run/k3s/containerd/containerd.sock /var/run/containerd/containerd.sock
 
-# push token to studentb and studentc
-rsync -avP /var/lib/rancher/rke2/server/token $ipb:/root
-rsync -avP /var/lib/rancher/rke2/server/token $ipc:/root
+### Verify RKE2 Kubectl
+kubectl get nodes -o wide
 ```
 
 ### studentb and studentc
 
-Let's run the same commands on the other two servers, b and c.
+Let's run the same commands on the other two servers, studentb and studentc.
 
 ```bash
-# agent install options https://docs.rke2.io/install/install_options/linux_agent_config/
-# online install
+### Setup RKE2 Agent
+mkdir -p /etc/rancher/rke2/
+
+### Configure RKE2 Config
+cat << EOF >> /etc/rancher/rke2/config.yaml
+#profile: cis-1.6
+write-kubeconfig-mode: 0640
+kube-apiserver-arg:
+- authorization-mode=RBAC,Node
+kubelet-arg:
+- protect-kernel-defaults=true
+- streaming-connection-idle-timeout=5m
+- max-pods=200
+cloud-provider-name: aws
+server: https://$ipa:9345
+token: RGSsuperduperfunWorkshop
+EOF
+```
+
+```bash
+### Download and Install RKE2 Agent
+### Install Options --> https://docs.rke2.io/install/install_options/linux_agent_config/
 curl -sfL https://get.rke2.io | INSTALL_RKE2_CHANNEL=v1.24 INSTALL_RKE2_TYPE=agent sh -
 
-# use token
-token=$(cat /root/token)
-
-# deploy 
-mkdir -p /etc/rancher/rke2/
-echo -e "server: https://$ipa:9345\ntoken: $token\nwrite-kubeconfig-mode: 0600\n#profile: cis-1.6\nkube-apiserver-arg:\n- \"authorization-mode=RBAC,Node\"\nkubelet-arg:\n- \"protect-kernel-defaults=true\" " > /etc/rancher/rke2/config.yaml
-
-# start all the things
+### Enable and Start the RKE2 Agent
 systemctl enable --now rke2-agent.service
 ```
 
@@ -251,4 +317,4 @@ kubectl apply -f http://git.$NUM.rancherfederal.training/gitea/workshop/raw/bran
 
 ## Questions/Comments
 
-Workshop Completed! Nice.
+Workshop Completed! Nice. How do we feel?

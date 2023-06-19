@@ -23,6 +23,11 @@ variable "domain" {
   description = "(Required) The AWS Route53 Domain to use for the instance(s)."
 }
 
+variable "number_of_students" {
+  default     = 3
+  description = "(Required) The number of students to use for the instance(s)."
+}
+
 variable "token" {
   default = "awsRKE2terraform"
   description = "(Required) The RKE2 Cluster Join Token to use for the cluster(s)."
@@ -46,11 +51,6 @@ variable "ami_id" {
 variable "instance_type" {
   default     = "m5d.xlarge"
   description = "(Required) The AWS Instance type to use for the instance(s)."
-}
-
-variable "number_of_students" {
-  default     = 3
-  description = "(Required) The number of students to use for the instance(s)."
 }
 
 variable "associate_public_ip_address" {
