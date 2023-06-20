@@ -10,7 +10,20 @@ spec:
   repo: https://git.$NUM.rancherfederal.training/gitea/workshop
   targetNamespace: flask
   paths:
-  - fleet/flask
+  - /fleet/flask
+---
+kind: GitRepo
+apiVersion: fleet.cattle.io/v1alpha1
+metadata:
+  name: rancher-demo
+  namespace: fleet-local
+spec:
+  branch: main
+  insecureSkipTLSVerify: true
+  repo: https://git.$NUM.rancherfederal.training/gitea/workshop
+  targetNamespace: rancher-demo
+  paths:
+  - /fleet/rancher-demo-app
 ---
 kind: GitRepo
 apiVersion: fleet.cattle.io/v1alpha1
@@ -23,7 +36,7 @@ spec:
   repo: https://git.$NUM.rancherfederal.training/gitea/workshop
   targetNamespace: whoami
   paths:
-  - fleet/whoami
+  - /fleet/whoami
 ---
 kind: GitRepo
 apiVersion: fleet.cattle.io/v1alpha1
@@ -36,7 +49,7 @@ spec:
   repo: https://git.$NUM.rancherfederal.training/gitea/workshop
   targetNamespace: ghost
   paths:
-  - fleet/ghost
+  - /fleet/ghost
 ---
 # Rancher Manager NavLinks Resources
 apiVersion: ui.cattle.io/v1
@@ -54,6 +67,24 @@ spec:
     name: flask
     namespace: flask
     port: "5000"
+    path: /
+    scheme: http
+---
+apiVersion: ui.cattle.io/v1
+kind: NavLink
+metadata:
+  name: rancher-demo
+spec:
+  label: RancherDemoApp
+  target: _blank
+  description: Rancher Demo Application
+  group: Demo Applications
+  label: Rancher Demo App
+  sideLabel: Rancher
+  toService:
+    name: rancher-demo
+    namespace: rancher-demo
+    port: "8080"
     path: /
     scheme: http
 ---
