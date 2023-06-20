@@ -59,10 +59,10 @@ metadata:
 spec:
   label: Flask
   target: _blank
-  description: Flask Demo Application
+  description: Flask Demo Application... for Rancher Workshop
   group: Demo Applications
   label: Flask Demo App
-  sideLabel: Flask
+  sideLabel: FLASK
   toService:
     name: flask
     namespace: flask
@@ -77,16 +77,11 @@ metadata:
 spec:
   label: RancherDemoApp
   target: _blank
-  description: Rancher Demo Application
+  description: Rancher Demo Application... for Rancher Workshop
   group: Demo Applications
   label: Rancher Demo App
-  sideLabel: Rancher
-  toService:
-    name: rancher-demo
-    namespace: rancher-demo
-    port: "8080"
-    path: /
-    scheme: http
+  sideLabel: RANCHER
+  toURL: https://rancher-demo.$NUM.rancherfederal.training
 ---
 apiVersion: ui.cattle.io/v1
 kind: NavLink
@@ -95,14 +90,14 @@ metadata:
 spec:
   label: whoami
   target: _blank
-  description: WHOAMI Application
+  description: WHOAMI Application... for Rancher Workshop
   group: Demo Applications
   label: WHOAMI Demo App
   sideLabel: WHOAMI
   toService:
     name: whoami
     namespace: whoami
-    port: "5000"
+    port: "8000"
     path: /
     scheme: http
 ---
@@ -113,13 +108,13 @@ metadata:
 spec:
   label: ghost
   target: _blank
-  description: Ghost Application
+  description: Ghost Application... for Rancher Workshop
   group: Demo Applications
   label: Ghost Demo App
   sideLabel: GHOST
   toService:
     name: ghost
     namespace: ghost
-    port: "5000"
+    port: "2368"
     path: /
     scheme: http
