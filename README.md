@@ -70,11 +70,13 @@ Once logged into code server, open the menu in the top left corner, click on ter
 
 ```bash
 ### In the first terminal type:
+## enter Pa22word
 ssh $studentb
 ```
 
 ```bash
 ### In the second terminal type:
+## enter Pa22word
 ssh $studentc
 ```
 
@@ -186,7 +188,7 @@ systemctl enable --now rke2-server.service
 sudo ln -s /var/lib/rancher/rke2/data/v1*/bin/kubectl /usr/bin/kubectl
 sudo ln -s /var/run/k3s/containerd/containerd.sock /var/run/containerd/containerd.sock
 export KUBECONFIG=/etc/rancher/rke2/rke2.yaml 
-export PATH=$PATH;/var/lib/rancher/rke2/bin;/usr/local/bin/
+export PATH=$PATH:/var/lib/rancher/rke2/bin:/usr/local/bin/
 
 ### Verify RKE2 Kubectl
 kubectl get nodes -o wide
@@ -252,7 +254,7 @@ kubectl create namespace cattle-system
 
 helm upgrade -i rancher rancher-latest/rancher --namespace cattle-system --set replicas=1 --set auditLog.level=2 --set auditLog.destination=hostPath --set bootstrapPassword=Pa22word --set hostname=rancher.$NUM.$DOMAIN
 
-sleep 20
+sleep 30
 
 ### Verify the status of the Rancher Manager
 kubectl get pods --namespace cattle-system
@@ -345,7 +347,7 @@ kubectl create namespace gitea-system
 
 helm upgrade -i gitea gitea-charts/gitea --namespace gitea-system --set gitea.admin.password=Pa22word --set gitea.admin.username=gitea --set persistence.size=1Gi --set postgresql.persistence.size=1Gi --set gitea.config.server.ROOT_URL=http://git.$NUM.$DOMAIN --set gitea.config.server.DOMAIN=git.$NUM.$DOMAIN --set ingress.enabled=true --set ingress.hosts[0].host=git.$NUM.$DOMAIN --set ingress.hosts[0].paths[0].path=/ --set ingress.hosts[0].paths[0].pathType=Prefix
 
-sleep 30
+sleep 50
 
 ### Verify the status of Gitea
 kubectl get pods --namespace gitea-system
@@ -365,7 +367,7 @@ After Gitea finishes deploying, head back to the **`student1a`** server and copy
 curl -X POST 'http://git.'$NUM'.'$DOMAIN'/api/v1/repos/migrate' -H 'accept: application/json' -H 'authorization: Basic Z2l0ZWE6UGEyMndvcmQ=' -H 'Content-Type: application/json' -d '{ "clone_addr": "https://github.com/zackbradys/rancher-workshop", "repo_name": "workshop","repo_owner": "gitea"}'
 ```
 
-Before we deploy our GitRepo with Fleet, we need to edit our **`gitrepo.yaml`** located at **`http://git.$NUM.rancherfederal.training/gitea/workshop/src/branch/main/fleet/gitea.yaml`**. 
+Before we deploy our GitRepo with Fleet, we need to edit our **`gitrepo.yaml`** and our **`app deployment yamls`** located at **`http://git.$NUM.rancherfederal.training/gitea/workshop/src/branch/main/fleet/gitea.yaml`**. 
 
 Update all occurances of **`"$NUM"`** to your student number.
 
