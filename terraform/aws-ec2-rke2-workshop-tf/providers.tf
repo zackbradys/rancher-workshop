@@ -18,7 +18,7 @@ provider "aws" {
     tags = {
       provisioner = "terraform"
       environment = "workshop"
-      "kubernetes.io/cluster/aws-rke2" = "shared"
+      "kubernetes.io/cluster/aws-rke2-workshop" = "shared"
     }
   }
 }

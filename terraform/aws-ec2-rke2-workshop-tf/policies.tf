@@ -1,5 +1,5 @@
 resource "aws_iam_role" "aws_iam_role_rke2" {
-  name        = "aws-rke2-iam-role"
+  name        = "aws-rke2-workshop-iam-role"
   description = "AWS RKE2 CCM Node IAM Role"
 
   assume_role_policy = jsonencode({
@@ -18,7 +18,7 @@ resource "aws_iam_role" "aws_iam_role_rke2" {
 }
 
 resource "aws_iam_role_policy" "aws_iam_policy_rke2" {
-  name        = "aws-rke2-iam-policy"
+  name        = "aws-rke2-workshop-iam-policy"
   role       = aws_iam_role.aws_iam_role_rke2.id
 
   policy = jsonencode({
@@ -101,6 +101,6 @@ resource "aws_iam_role_policy" "aws_iam_policy_rke2" {
 }
 
 resource "aws_iam_instance_profile" "aws_iam_profile_rke2" {
-  name = "aws-rke2-iam-profile"
+  name = "aws-rke2-workshop-iam-profile"
   role = "${aws_iam_role.aws_iam_role_rke2.name}"
 }

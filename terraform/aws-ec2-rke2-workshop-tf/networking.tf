@@ -4,7 +4,7 @@ resource "aws_vpc" "aws_rke2_vpc" {
   enable_dns_hostnames = true
 
   tags = {
-    Name = "aws-rke2-vpc"
+    Name = "aws-rke2-workshop-vpc"
   }
 }
 
@@ -12,7 +12,7 @@ resource "aws_internet_gateway" "aws_rke2_igw" {
   vpc_id = aws_vpc.aws_rke2_vpc.id
 
   tags = {
-    Name = "aws-rke2-igw"
+    Name = "aws-rke2-workshop-igw"
   }
 }
 
@@ -25,7 +25,7 @@ resource "aws_route_table" "aws_rke2_rtb" {
   }
 
   tags = {
-    Name = "aws-rke2-rtb"
+    Name = "aws-rke2-workshop-rtb"
   }
 }
 
@@ -40,14 +40,14 @@ resource "aws_subnet" "aws_rke2_subnet" {
   availability_zone = "${var.region}a"
 
   tags = {
-    Name = "aws-rke2-subnet"
+    Name = "aws-rke2-workshop-subnet"
   }
 }
 
 resource "aws_security_group" "aws_rke2_sg" {
   vpc_id      = aws_vpc.aws_rke2_vpc.id
   description = "AWS RKE2 Security Group"
-  name        = "aws-rke2-sg"
+  name        = "aws-rke2-workshop-sg"
 
   tags = {
     Name = "aws-rke2-sg"
