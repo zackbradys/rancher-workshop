@@ -24,7 +24,7 @@ variable "domain" {
 }
 
 variable "number_of_students" {
-  default     = 3
+  default     = 35
   description = "(Required) The number of students to use for the instance(s)."
 }
 
