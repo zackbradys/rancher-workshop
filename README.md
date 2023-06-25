@@ -1,6 +1,6 @@
 # Rancher Government Solutions Workshop
 
-![rancher-long-banner](./images/rgs-banner-rounded.png)
+![rancher-long-banner](/images/rgs-banner-rounded.png)
 
 ### Table of Contents
 * [About Me](#about-me)
