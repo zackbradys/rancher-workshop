@@ -40,7 +40,7 @@ Before we get started, I wanted to shout out to **[@clemenko](https://github.com
 
 ## Workshop Outcomes
 *	Ability to Configure, Deploy, and Install Rancher Kubernetes (RKE2), Rancher Multi-Cluster Manager, Rancher Longhorn, and Rancher NeuVector.
-*	Ability to Configure and Deploy Rancher Fleet and GitOps integration within Kubernetes clusters (Fleet <*> Gitea).
+*	Ability to Configure/Deploy Rancher Fleet and GitOps integration within Kubernetes clusters (Fleet <*> Gitea).
 *	Understanding of the complexities and challenges within Kubernetes and the simplicity with Rancher.
 *	Understanding of the Cluster and Application Lifecycle Management within Kubernetes clusters.
 *	Understanding of the best practices around Infrastructure As Code (IaC), Security, and Compliance.
