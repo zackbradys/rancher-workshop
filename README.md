@@ -39,22 +39,19 @@ Before we get started, I wanted to shout out to **[@clemenko](https://github.com
 * An awesome demo application or two :)
 
 ## Workshop Outcomes
-*	Ability to Configure/Deploy/Install Rancher Kubernetes (RKE2), Rancher Multi*Cluster Manager, Rancher Longhorn, and Rancher NeuVector.
-*	Ability to Configure/Deploy Rancher Fleet and GitOps integration within Kubernetes clusters (Fleet <*> Gitea).
-*	Understanding of the complexities and challenges within Kubernetes and the simplicity within Rancher.
-*	Understanding of Cluster and Application Lifecycle Management, within Kubernetes clusters.
-*	Understanding of best practices around Infrastructure As Code (IaC), Security, and Compliance, within Kubernetes clusters.
+*	Ability to Configure, Deploy, and Install Rancher Kubernetes (RKE2), Rancher Multi-Cluster Manager, Rancher Longhorn, and Rancher NeuVector.
+*	Ability to Configure and Deploy Rancher Fleet and GitOps integration within Kubernetes clusters (Fleet <*> Gitea).
+*	Understanding of the complexities and challenges within Kubernetes and the simplicity with Rancher.
+*	Understanding of the Cluster and Application Lifecycle Management within Kubernetes clusters.
+*	Understanding of the best practices around Infrastructure As Code (IaC), Security, and Compliance.
 
 ## Infrastructure
 
 ### Prerequistes
 
-* Basic Linux command line skills
-* Familiarity with a text editor (VSCode aka Code Server)
-* Every student has 3 vms.
-  * The instructor will assign the student a number.
-  * Rocky Linux 9
-* ASK QUESTIONS!! PARTICIPATE!
+* Basic Linux Command Line Skills
+* Familiarity with a Text Editor (VSCode)
+* ASK QUESTIONS!!! PARTICIPATE!!
 
 ### Student Environment Signup
 
@@ -66,10 +63,10 @@ Access URL: `http://student$NUMa.rancherfederal.training:8080`
 
 Password = `Pa22word`
 
-Once logged into code server, open the menu in the top left corner, click on terminal, then click on new terminal, do this two times. 
+Once logged into code server for **`studenta`**, open the menu in the top left corner, click on terminal, then click on new terminal two times. 
 
 ```bash
-### In the first terminal type:
+### In the second terminal type:
 ## enter Pa22word
 ssh $studentb
 ```
@@ -82,7 +79,7 @@ ssh $studentc
 
 ```bash
 ### Example URLS in the Workshop:
-SSH --> http://student1a.rancherfederal.training
+VSCode --> http://student1a.rancherfederal.training
 Rancher --> https://rancher.1.rancherfederal.training
 Longhorn --> https://longhorn.1.rancherfederal.training
 NeuVector --> https://neuvector.1.rancherfederal.training
@@ -91,13 +88,13 @@ Gitea --> https://git.1.rancherfederal.training
 
 ### DISA STIGS?!!
 
-You can download the STIGs for Rancher RKE2 and the Rancher Multi Cluster Manager below. For this workshop, we will be using all the latest controls.
+You can download the Official DISA STIGs for Rancher RKE2 and the Rancher Multi Cluster Manager below. For this workshop, we will be using all the latest controls.
 * [RGS_RKE2_V1R2_STIG](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RGS_RKE2_V1R2_STIG.zip)
 * [RGS_MCM_V1R2_STIG](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RGS_MCM_V1R2_STIG.zip)
-* [DISA STIG Viewer](https://public.cyber.mil/stigs/srg-stig-tools/).
+* [DISA STIG Viewer](https://public.cyber.mil/stigs/srg-stig-tools/)
 
 If you're curious to learn more about them, there is a nice article about it from [Businesswire](https://www.businesswire.com/news/home/20221101005546/en/DISA-Validates-Rancher-Government-Solutions%E2%80%99-Kubernetes-Distribution-RKE2-Security-Technical-Implementation-Guide).
-We even have a tldr for Rancher [here](https://github.com/clemenko/rancher_stig)!
+We even have a tl:dr [here](https://github.com/clemenko/rancher_stig)!
 
 ## Rancher RKE2
 
