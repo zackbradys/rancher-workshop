@@ -1,6 +1,6 @@
-# Rancher Government Solutions Workshop
-
 ![rancher-long-banner](/images/rgs-banner-rounded.png)
+
+# Rancher Government Solutions Workshop
 
 ### Table of Contents
 * [About Me](#about-me)
@@ -15,7 +15,7 @@
 * [Questions and Comments](#questions-and-comments)
 
 ## About Me
-A little bit about me, my history, and what I've done in the industry. 
+A little bit about me, my history, and what I've done in the industry.
 - DOD/IC Contractor
 - U.S. Military Veteran
 - Open-Source Contributor
@@ -24,12 +24,12 @@ A little bit about me, my history, and what I've done in the industry.
 
 ## Introduction
 
-### Welcome to the Rancher Government Solutions Workshop! 
+### Welcome to the Rancher Government Solutions Workshop!
 We will be installing, configuring, and deploying the entire Rancher Stack, including: Rancher RKE2, Rancher Multi-Cluster Manager, Rancher Longhorn, and Rancher NeuVector. Additionally, we will be enabling all hardened features such as CIS Profiles, DISA STIGS, and more. For ease of the workshop, we will not be simulating an airgap. If you would like to find out more about how easy the Rancher Stack can be airgapped, please reach out!
 
 You are welcome to follow along with me or skip ahead, all the instructions are included below and it's all copy/paste. Don't worry... we have had plenty of folks forget how to copy/paste... you will not be the first, so please ask questions!
 
-Before we get started, I wanted to shout out to **[@clemenko](https://github.com/clemenko)** for the basis of this workshop. 
+Before we get started, I wanted to shout out to **[@clemenko](https://github.com/clemenko)** for the basis of this workshop.
 
 ### The Rancher Stack:
 * Rancher RKE2 (Kubernetes Engine) - [learn more](https://www.rancher.com/products/rke)
@@ -63,7 +63,7 @@ Access URL: `http://student$NUMa.rancherfederal.training:8080`
 
 Password = `Pa22word`
 
-Once logged into code server for **`studenta`**, open the menu in the top left corner, click on terminal, then click on new terminal two times. 
+Once logged into code server for **`studenta`**, open the menu in the top left corner, click on terminal, then click on new terminal two times.
 
 ```bash
 ### In the second terminal type:
@@ -174,7 +174,7 @@ EOF
 ```bash
 ### Download and Install RKE2 Server
 ### Install Options --> https://docs.rke2.io/install/install_options/server_config/
-curl -sfL https://get.rke2.io | INSTALL_RKE2_CHANNEL=v1.24 INSTALL_RKE2_TYPE=server sh - 
+curl -sfL https://get.rke2.io | INSTALL_RKE2_CHANNEL=v1.24 INSTALL_RKE2_TYPE=server sh -
 
 ### Enable and Start the RKE2 Server
 systemctl enable --now rke2-server.service
@@ -184,7 +184,7 @@ systemctl enable --now rke2-server.service
 ### Wait and Add Links
 sudo ln -s /var/lib/rancher/rke2/data/v1*/bin/kubectl /usr/bin/kubectl
 sudo ln -s /var/run/k3s/containerd/containerd.sock /var/run/containerd/containerd.sock
-export KUBECONFIG=/etc/rancher/rke2/rke2.yaml 
+export KUBECONFIG=/etc/rancher/rke2/rke2.yaml
 export PATH=$PATH:/var/lib/rancher/rke2/bin:/usr/local/bin/
 
 ### Verify RKE2 Kubectl
@@ -239,7 +239,7 @@ helm repo update
 ### Create the Cert Manager Namespace and Install Cert Manager
 kubectl create namespace cert-manager
 
-helm upgrade -i cert-manager jetstack/cert-manager --namespace cert-manager --set installCRDs=true 
+helm upgrade -i cert-manager jetstack/cert-manager --namespace cert-manager --set installCRDs=true
 
 sleep 10
 
@@ -364,7 +364,7 @@ After Gitea finishes deploying, head back to the **`student1a`** server and copy
 curl -X POST 'http://git.'$NUM'.'$DOMAIN'/api/v1/repos/migrate' -H 'accept: application/json' -H 'authorization: Basic Z2l0ZWE6UGEyMndvcmQ=' -H 'Content-Type: application/json' -d '{ "clone_addr": "https://github.com/zackbradys/rancher-workshop", "repo_name": "workshop","repo_owner": "gitea"}'
 ```
 
-Before we deploy our GitRepo with Fleet, we need to edit our **`gitrepo.yaml`** and our **`app deployment yamls`** located at **`http://git.$NUM.rancherfederal.training/gitea/workshop/src/branch/main/fleet/gitea.yaml`**. 
+Before we deploy our GitRepo with Fleet, we need to edit our **`gitrepo.yaml`** and our **`app deployment yamls`** located at **`http://git.$NUM.rancherfederal.training/gitea/workshop/src/branch/main/fleet/gitea.yaml`**.
 
 Update all occurances of **`"$NUM"`** to your student number.
 
