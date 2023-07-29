@@ -1,4 +1,4 @@
-![rancher-long-banner](/images/rgs-banner-rounded.png)
+![rgs-rancher-banner](images/rgs-rancher-banner.png)
 
 # Rancher Government Solutions Workshop
 
