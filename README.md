@@ -115,10 +115,11 @@ mkdir -p /etc/rancher/rke2/ /var/lib/rancher/rke2/server/manifests/
 
 ### Configure RKE2 Config
 cat << EOF >> /etc/rancher/rke2/config.yaml
-#profile: cis-1.6
+#profile: cis-1.23
 selinux: true
 secrets-encryption: true
-write-kubeconfig-mode: 0600
+write-kubeconfig-mode: 0640
+use-service-account-credentials: true
 kube-controller-manager-arg:
 - bind-address=127.0.0.1
 - use-service-account-credentials=true
@@ -174,7 +175,7 @@ EOF
 ```bash
 ### Download and Install RKE2 Server
 ### Install Options --> https://docs.rke2.io/install/install_options/server_config/
-curl -sfL https://get.rke2.io | INSTALL_RKE2_CHANNEL=v1.24 INSTALL_RKE2_TYPE=server sh -
+curl -sfL https://get.rke2.io | INSTALL_RKE2_CHANNEL=v1.25 INSTALL_RKE2_TYPE=server sh -
 
 ### Enable and Start the RKE2 Server
 systemctl enable --now rke2-server.service
@@ -201,13 +202,14 @@ mkdir -p /etc/rancher/rke2/
 
 ### Configure RKE2 Config
 cat << EOF >> /etc/rancher/rke2/config.yaml
-#profile: cis-1.6
+#profile: cis-1.23
 write-kubeconfig-mode: 0640
 kube-apiserver-arg:
 - authorization-mode=RBAC,Node
 kubelet-arg:
 - protect-kernel-defaults=true
-- streaming-connection-idle-timeout=5m
+- read-only-port=0
+- authorization-mode=Webhook
 - max-pods=200
 cloud-provider-name: aws
 server: https://student${NUM}a.${DOMAIN}:9345
@@ -218,7 +220,7 @@ EOF
 ```bash
 ### Download and Install RKE2 Agent
 ### Install Options --> https://docs.rke2.io/install/install_options/linux_agent_config/
-curl -sfL https://get.rke2.io | INSTALL_RKE2_CHANNEL=v1.24 INSTALL_RKE2_TYPE=agent sh -
+curl -sfL https://get.rke2.io | INSTALL_RKE2_CHANNEL=v1.25 INSTALL_RKE2_TYPE=agent sh -
 
 ### Enable and Start the RKE2 Agent
 systemctl enable --now rke2-agent.service
