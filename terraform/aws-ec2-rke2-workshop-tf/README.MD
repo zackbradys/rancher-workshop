@@ -15,12 +15,12 @@ variable "region" {
 }
 
 variable "access_key" {
-  default = ""
+  default     = ""
   description = "(Required) The AWS Access Key to use for the instance(s)."
 }
 
 variable "secret_key" {
-  default = ""
+  default     = ""
   description = "(Required) The AWS Secret Key to use for the instance(s)."
 }
 

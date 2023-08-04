@@ -4,12 +4,12 @@ variable "region" {
 }
 
 variable "access_key" {
-  default = ""
+  default     = ""
   description = "(Required) The AWS Access Key to use for the instance(s)."
 }
 
 variable "secret_key" {
-  default = ""
+  default     = ""
   description = "(Required) The AWS Secret Key to use for the instance(s)."
 }
 
@@ -24,12 +24,12 @@ variable "domain" {
 }
 
 variable "number_of_students" {
-  default     = 35
+  default     = 30
   description = "(Required) The number of students to use for the instance(s)."
 }
 
 variable "token" {
-  default = "awsRKE2terraform"
+  default     = "awsRKE2terraform"
   description = "(Required) The RKE2 Cluster Join Token to use for the cluster(s)."
 }
 

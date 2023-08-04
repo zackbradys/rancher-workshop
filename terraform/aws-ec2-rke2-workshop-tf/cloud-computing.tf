@@ -10,8 +10,8 @@ resource "aws_instance" "aws_ec2_instance_studenta" {
   key_name                    = var.key_pair_name
 
   user_data = templatefile("${var.user_data_studenta}", {
-    DOMAIN  = "${var.domain}"
-    NUM     = "${count.index + 1}"
+    DOMAIN   = "${var.domain}"
+    NUM      = "${count.index + 1}"
     HOSTNAME = "student${count.index + 1}a.${var.domain}"
   })
 
@@ -43,8 +43,8 @@ resource "aws_instance" "aws_ec2_instance_studentb" {
   key_name                    = var.key_pair_name
 
   user_data = templatefile("${var.user_data_studentb}", {
-    DOMAIN  = "${var.domain}"
-    NUM     = "${count.index + 1}"
+    DOMAIN   = "${var.domain}"
+    NUM      = "${count.index + 1}"
     HOSTNAME = "student${count.index + 1}b.${var.domain}"
   })
 
@@ -76,8 +76,8 @@ resource "aws_instance" "aws_ec2_instance_studentc" {
   key_name                    = var.key_pair_name
 
   user_data = templatefile("${var.user_data_studentc}", {
-    DOMAIN  = "${var.domain}"
-    NUM     = "${count.index + 1}"
+    DOMAIN   = "${var.domain}"
+    NUM      = "${count.index + 1}"
     HOSTNAME = "student${count.index + 1}c.${var.domain}"
   })
 
