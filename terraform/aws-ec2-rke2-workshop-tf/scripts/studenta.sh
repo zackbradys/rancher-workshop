@@ -50,10 +50,8 @@ echo -e "StrictHostKeyChecking no" > /root/.ssh/config
 
 ### Install Packages
 yum install -y zip zstd tree jq git container-selinux iptables libnetfilter_conntrack libnfnetlink libnftnl policycoreutils-python-utils cryptsetup
-yum --setopt=tsflags=noscripts install -y nfs-utils
-yum --setopt=tsflags=noscripts install -y iscsi-initiator-utils && echo "InitiatorName=$(/sbin/iscsi-iname)" > /etc/iscsi/initiatorname.iscsi && systemctl enable --now iscsid
+yum install -y nfs-utils && yum install -y iscsi-initiator-utils && echo "InitiatorName=$(/sbin/iscsi-iname)" > /etc/iscsi/initiatorname.iscsi && systemctl enable --now iscsid
 echo -e "[keyfile]\nunmanaged-devices=interface-name:cali*;interface-name:flannel*" > /etc/NetworkManager/conf.d/rke2-canal.conf
-yum update -y && yum clean all
 
 ### Setting Instance Environment
 hostnamectl set-hostname $HOSTNAME
