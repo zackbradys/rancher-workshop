@@ -270,7 +270,7 @@ The username will be **`admin`** and the password will be **`Pa22word`**.
 
 One the easiest ways to have stateful storage on this cluster is using [Rancher Longhorn](https://rancher.com/products/longhorn). Not only does it intergrate really well, but it provides a lot of functionality with little configuration. Let's deploy it. Head back to the **`student1a`** server and copy and paste the commands below.
 
-*Note we are installing the connected method for speed. Please see the [Longhorn - Air Gap Install Guide](https://longhorn.io/docs/1.4.2/advanced-resources/deploy/airgap/).*
+*Note we are installing the connected method for speed. Please see the [Longhorn - Air Gap Install Guide](https://longhorn.io/docs/1.5.1/advanced-resources/deploy/airgap/).*
 
 ```bash
 ### Add Required Helm Repos
