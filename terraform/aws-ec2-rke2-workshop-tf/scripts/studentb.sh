@@ -1,13 +1,11 @@
 #!/bin/bash
 
-set -ebpf
-
 ### Set Variables
 export DOMAIN=${DOMAIN}
 export NUM=${NUM}
 export HOSTNAME=${HOSTNAME}
 
-### Applying System Settings
+### Apply System Settings
 cat << EOF >> /etc/sysctl.conf
 ### Updating System Settings
 vm.swappiness=0
@@ -49,9 +47,13 @@ systemctl restart sshd
 echo -e "StrictHostKeyChecking no" > /root/.ssh/config
 
 ### Install Packages
-yum install -y zip zstd tree jq git container-selinux iptables libnetfilter_conntrack libnfnetlink libnftnl policycoreutils-python-utils cryptsetup
-yum install -y nfs-utils && yum install -y iscsi-initiator-utils && echo "InitiatorName=$(/sbin/iscsi-iname)" > /etc/iscsi/initiatorname.iscsi && systemctl enable --now iscsid
-echo -e "[keyfile]\nunmanaged-devices=interface-name:cali*;interface-name:flannel*" > /etc/NetworkManager/conf.d/rke2-canal.conf
+yum install -y iptables container-selinux iptables libnetfilter_conntrack libnfnetlink libnftnl policycoreutils-python-utils cryptsetup
+yum install -y nfs-utils; yum install -y iscsi-initiator-utils; yum install -y zip zstd tree jq
+
+### Modify Settings
+echo "InitiatorName=$(/sbin/iscsi-iname)" > /etc/iscsi/initiatorname.iscsi && systemctl enable --now iscsid
+systemctl stop firewalld; systemctl disable firewalld; systemctl stop nm-cloud-setup; systemctl disable nm-cloud-setup; systemctl stop nm-cloud-setup.timer; systemctl disable nm-cloud-setup.timer
+echo -e "[keyfile]\unmanaged-devices=interface-name:cali*;interface-name:flannel*" > /etc/NetworkManager/conf.d/rke2-canal.conf & systemctl restart NetworkManager
 
 ### Setting Instance Environment
 hostnamectl set-hostname $HOSTNAME

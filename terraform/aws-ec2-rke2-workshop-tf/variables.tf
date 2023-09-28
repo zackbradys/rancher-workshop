@@ -44,12 +44,12 @@ variable "subnet_cidr_block" {
 }
 
 variable "ami_id" {
-  default     = "ami-0cce0fd28f5ae1c16"
+  default     = "ami-09c77dc92e45bc3ea"
   description = "(Required) The AWS AMI ID to use for the instance(s)."
 }
 
 variable "instance_type" {
-  default     = "m6a.xlarge"
+  default     = "m5.xlarge"
   description = "(Required) The AWS Instance type to use for the instance(s)."
 }
 
