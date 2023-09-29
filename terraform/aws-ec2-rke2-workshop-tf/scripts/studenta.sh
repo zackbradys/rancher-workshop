@@ -9,7 +9,7 @@ export HOSTNAME=${HOSTNAME}
 
 ### Apply System Settings
 cat << EOF >> /etc/sysctl.conf
-### Updating System Settings
+### Modified System Settings
 vm.swappiness=0
 vm.panic_on_oom=0
 vm.overcommit_memory=1
