@@ -152,23 +152,6 @@ kind: Policy
 rules:
 - level: RequestResponse
 EOF
-
-### Congiure NGINX Policies
-cat << EOF >> /var/lib/rancher/rke2/server/manifests/rke2-ingress-nginx-config.yaml
----
-apiVersion: helm.cattle.io/v1
-kind: HelmChartConfig
-metadata:
-  name: rke2-ingress-nginx
-  namespace: kube-system
-spec:
-  valuesContent: |-
-    controller:
-      config:
-        use-forwarded-headers: true
-      extraArgs:
-        enable-ssl-passthrough: true
-EOF
 ```
 
 ```bash
