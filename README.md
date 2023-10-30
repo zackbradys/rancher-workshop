@@ -108,10 +108,8 @@ Copy and paste the commands below on the **`studenta`** server. Make sure to tak
 
 ```bash
 ### Setup RKE2 Server
-mkdir -p /opt/rke2-artifacts
-cd /opt/rke2-artifacts
+mkdir -p /opt/rke2-artifacts/ /etc/rancher/rke2/ /var/lib/rancher/rke2/server/manifests/
 useradd -r -c "etcd user" -s /sbin/nologin -M etcd -U
-mkdir -p /etc/rancher/rke2/ /var/lib/rancher/rke2/server/manifests/
 
 ### Configure RKE2 Config
 cat << EOF >> /etc/rancher/rke2/config.yaml
@@ -141,7 +139,6 @@ kubelet-arg:
 - read-only-port=0
 - authorization-mode=Webhook
 - streaming-connection-idle-timeout=5m
-cloud-provider-name: aws
 token: RGSsuperduperfunWorkshop
 EOF
 
@@ -185,6 +182,7 @@ mkdir -p /etc/rancher/rke2/
 ### Configure RKE2 Config
 cat << EOF >> /etc/rancher/rke2/config.yaml
 #profile: cis-1.23
+selinux: true
 write-kubeconfig-mode: 0640
 kube-apiserver-arg:
 - authorization-mode=RBAC,Node
@@ -192,7 +190,6 @@ kubelet-arg:
 - protect-kernel-defaults=true
 - read-only-port=0
 - authorization-mode=Webhook
-cloud-provider-name: aws
 server: https://student${NUM}a.${DOMAIN}:9345
 token: RGSsuperduperfunWorkshop
 EOF
