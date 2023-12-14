@@ -146,8 +146,17 @@ EOF
 cat << EOF >> /etc/rancher/rke2/audit-policy.yaml
 apiVersion: audit.k8s.io/v1
 kind: Policy
+metadata:
+  name: rke2-audit-policy
 rules:
-- level: RequestResponse
+  - level: Metadata
+    resources:
+    - group: ""
+      resources: ["secrets"]
+  - level: RequestResponse
+    resources:
+    - group: ""
+      resources: ["*"]
 EOF
 ```
 
@@ -164,8 +173,14 @@ systemctl enable --now rke2-server.service
 ### Wait and Add Links
 sudo ln -s /var/lib/rancher/rke2/data/v1*/bin/kubectl /usr/bin/kubectl
 sudo ln -s /var/run/k3s/containerd/containerd.sock /var/run/containerd/containerd.sock
-export KUBECONFIG=/etc/rancher/rke2/rke2.yaml
+
+### Update and Source BASHRC
+cat << EOF >> ~/.bashrc
 export PATH=$PATH:/var/lib/rancher/rke2/bin:/usr/local/bin/
+export KUBECONFIG=/etc/rancher/rke2/rke2.yaml
+export CRI_CONFIG_FILE=/var/lib/rancher/rke2/agent/etc/crictl.yaml
+alias k=kubectl
+EOF
 
 ### Verify RKE2 Kubectl
 kubectl get nodes -o wide
