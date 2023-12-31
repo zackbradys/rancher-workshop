@@ -49,8 +49,8 @@ systemctl restart sshd
 echo -e "StrictHostKeyChecking no" > /root/.ssh/config
 
 ### Install Packages
-yum install -y iptables container-selinux iptables libnetfilter_conntrack libnfnetlink libnftnl policycoreutils-python-utils cryptsetup
-yum install -y nfs-utils; yum install -y iscsi-initiator-utils; yum install -y zip zstd tree jq
+yum install -y iptables container-selinux libnetfilter_conntrack libnfnetlink libnftnl policycoreutils-python-utils cryptsetup
+yum install -y nfs-utils iscsi-initiator-utils; yum install -y zip zstd tree jq
 
 ### Modify Settings
 echo "InitiatorName=$(/sbin/iscsi-iname)" > /etc/iscsi/initiatorname.iscsi && systemctl enable --now iscsid

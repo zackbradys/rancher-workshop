@@ -49,8 +49,8 @@ systemctl restart sshd
 echo -e "StrictHostKeyChecking no" > /root/.ssh/config
 
 ### Install Packages
-yum install -y iptables container-selinux iptables libnetfilter_conntrack libnfnetlink libnftnl policycoreutils-python-utils cryptsetup
-yum install -y nfs-utils; yum install -y iscsi-initiator-utils; yum install -y zip zstd tree jq
+yum install -y iptables container-selinux libnetfilter_conntrack libnfnetlink libnftnl policycoreutils-python-utils cryptsetup
+yum install -y nfs-utils iscsi-initiator-utils; yum install -y zip zstd tree jq
 
 ### Modify Settings
 echo "InitiatorName=$(/sbin/iscsi-iname)" > /etc/iscsi/initiatorname.iscsi && systemctl enable --now iscsid
@@ -76,7 +76,7 @@ export HOME=/root
 mkdir -p /opt/rancher/helm
 cd /opt/rancher/helm
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-chmod 700 get_helm.sh && ./get_helm.sh
+chmod 755 get_helm.sh && ./get_helm.sh
 mv /usr/local/bin/helm /usr/bin/helm
 
 ### Install Code Server
