@@ -163,7 +163,7 @@ EOF
 ```bash
 ### Download and Install RKE2 Server
 ### Install Options --> https://docs.rke2.io/install/install_options/server_config/
-curl -sfL https://get.rke2.io | INSTALL_RKE2_CHANNEL=v1.26 INSTALL_RKE2_TYPE=server sh -
+curl -sfL https://get.rke2.io | INSTALL_RKE2_CHANNEL=v1.27 INSTALL_RKE2_TYPE=server sh -
 
 ### Enable and Start the RKE2 Server
 systemctl enable --now rke2-server.service
@@ -213,7 +213,7 @@ EOF
 ```bash
 ### Download and Install RKE2 Agent
 ### Install Options --> https://docs.rke2.io/install/install_options/linux_agent_config/
-curl -sfL https://get.rke2.io | INSTALL_RKE2_CHANNEL=v1.26 INSTALL_RKE2_TYPE=agent sh -
+curl -sfL https://get.rke2.io | INSTALL_RKE2_CHANNEL=v1.27 INSTALL_RKE2_TYPE=agent sh -
 
 ### Enable and Start the RKE2 Agent
 systemctl enable --now rke2-agent.service
