@@ -3,19 +3,22 @@
 # Rancher Government Solutions Workshop
 
 ### Table of Contents
-* [About Me](#about-me)
-* [Introduction](#introduction)
-* [Workshop Outcomes](#workshop-outcomes)
-* [Infrastructure](#infrastructure)
-* [Rancher RKE2](#rancher-rke2)
-* [Rancher Multi Cluster Manager](#rancher-multi-cluster-manager)
-* [Rancher Longhorn](#rancher-longhorn)
-* [Rancher NeuVector](#rancher-neuvector)
-* [Rancher Fleet and Gitea](#rancher-fleet-and-gitea)
-* [Questions and Comments](#questions-and-comments)
+
+- [About Me](#about-me)
+- [Introduction](#introduction)
+- [Workshop Outcomes](#workshop-outcomes)
+- [Infrastructure](#infrastructure)
+- [Rancher RKE2](#rancher-rke2)
+- [Rancher Multi Cluster Manager](#rancher-multi-cluster-manager)
+- [Rancher Longhorn](#rancher-longhorn)
+- [Rancher NeuVector](#rancher-neuvector)
+- [Rancher Fleet and Gitea](#rancher-fleet-and-gitea)
+- [Questions and Comments](#questions-and-comments)
 
 ## About Me
-A little bit about me, my history, and what I've done in the industry.
+
+A little bit about me and my history...
+
 - Former Contractor
 - U.S. Military Reservist
 - Open-Source Contributor
@@ -25,6 +28,7 @@ A little bit about me, my history, and what I've done in the industry.
 ## Introduction
 
 ### Welcome to the Rancher Government Solutions Workshop!
+
 We will be installing, configuring, and deploying the entire Rancher Stack, including: Rancher RKE2, Rancher Multi-Cluster Manager, Rancher Longhorn, and Rancher NeuVector. Additionally, we will be enabling all hardened features such as CIS Profiles, DISA STIGS, and more. For ease of the workshop, we will not be simulating an airgap. If you would like to find out more about how easy the Rancher Stack can be airgapped, please reach out!
 
 You are welcome to follow along with me or skip ahead, all the instructions are included below and it's all copy/paste. Don't worry... we have had plenty of folks forget how to copy/paste... you will not be the first, so please ask questions!
@@ -32,26 +36,28 @@ You are welcome to follow along with me or skip ahead, all the instructions are 
 Before we get started, I wanted to shout out to **[@clemenko](https://github.com/clemenko)** for the basis of this workshop.
 
 ### The Rancher Stack:
-* Rancher RKE2 (Kubernetes Engine) - [learn more](https://www.rancher.com/products/rke)
-* Rancher MCM (Cluster Management) - [learn more](https://www.rancher.com/products/rancher)
-* Longhorn (Storage) - [learn more](https://www.rancher.com/products/longhorn)
-* Neuvector (Security) - [learn more](https://ranchergovernment.com/neuvector)
-* An awesome demo application or two :)
+
+- Rancher RKE2 (Kubernetes Engine) - [learn more](https://www.rancher.com/products/rke)
+- Rancher MCM (Cluster Management) - [learn more](https://www.rancher.com/products/rancher)
+- Longhorn (Storage) - [learn more](https://www.rancher.com/products/longhorn)
+- Neuvector (Security) - [learn more](https://ranchergovernment.com/neuvector)
+- An awesome demo application or two :)
 
 ## Workshop Outcomes
-*	Ability to Configure, Deploy, and Install Rancher Kubernetes (RKE2), Rancher Multi-Cluster Manager, Rancher Longhorn, and Rancher NeuVector.
-*	Ability to Configure/Deploy Rancher Fleet and GitOps integration within Kubernetes clusters (Fleet <-> Gitea).
-*	Understanding of the complexities and challenges within Kubernetes and the simplicity with Rancher.
-*	Understanding of the Cluster and Application Lifecycle Management within Kubernetes clusters.
-*	Understanding of the best practices around Infrastructure As Code (IaC), Security, and Compliance.
+
+- Ability to Configure, Deploy, and Install Rancher Kubernetes (RKE2), Rancher Multi-Cluster Manager, Rancher Longhorn, and Rancher NeuVector.
+- Ability to Configure/Deploy Rancher Fleet and GitOps integration within Kubernetes clusters (Fleet <-> Gitea).
+- Understanding of the complexities and challenges within Kubernetes and the simplicity with Rancher.
+- Understanding of the Cluster and Application Lifecycle Management within Kubernetes clusters.
+- Understanding of the best practices around Infrastructure As Code (IaC), Security, and Compliance.
 
 ## Infrastructure
 
 ### Prerequistes
 
-* Basic Linux Command Line Skills
-* Familiarity with a Text Editor (VSCode)
-* ASK QUESTIONS!!! PARTICIPATE!!
+- Basic Linux Command Line Skills
+- Familiarity with a Text Editor (VSCode)
+- ASK QUESTIONS!!! PARTICIPATE!!
 
 ### Student Environment Signup
 
@@ -89,9 +95,10 @@ Gitea --> https://git.1.rancherfederal.training
 ### DISA STIGS?!!
 
 You can download the Official DISA STIGs for Rancher RKE2 and the Rancher Multi Cluster Manager below. For this workshop, we will be using all the latest controls.
-* [RGS_RKE2_V1R2_STIG](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RGS_RKE2_V1R2_STIG.zip)
-* [RGS_MCM_V1R2_STIG](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RGS_MCM_V1R2_STIG.zip)
-* [DISA STIG Viewer](https://public.cyber.mil/stigs/srg-stig-tools/)
+
+- [RGS_RKE2_V1R2_STIG](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RGS_RKE2_V1R2_STIG.zip)
+- [RGS_MCM_V1R2_STIG](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RGS_MCM_V1R2_STIG.zip)
+- [DISA STIG Viewer](https://public.cyber.mil/stigs/srg-stig-tools/)
 
 If you're curious to learn more about them, there is a nice article about it from [Businesswire](https://www.businesswire.com/news/home/20221101005546/en/DISA-Validates-Rancher-Government-Solutions%E2%80%99-Kubernetes-Distribution-RKE2-Security-Technical-Implementation-Guide).
 We even have a tl:dr [here](https://github.com/clemenko/rancher_stig)!
