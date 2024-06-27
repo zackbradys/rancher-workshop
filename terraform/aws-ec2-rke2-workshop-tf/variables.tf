@@ -44,7 +44,7 @@ variable "subnet_cidr_block" {
 }
 
 variable "ami_id" {
-  default     = "ami-08f362c39d03a4eb5"
+  default     = "ami-09fb459fad4613d55"
   description = "(Required) The AWS AMI ID to use for the instance(s)."
 }
 
